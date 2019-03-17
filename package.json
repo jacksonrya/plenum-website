@@ -17,6 +17,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --open",
+    "estage": "vue-cli-service serve --mode production",
     "stage": "vue-cli-service build --mode staging",
     "build": "vue-cli-service build",
     "test": "vue-cli-service test",
@@ -32,6 +33,7 @@
     "vue-class-component": "^6.0.0",
     "vue-focus": "^2.1.0",
     "vue-headroom": "^0.8.1",
+    "vue-mq": "^1.0.1",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
     "vue-spatialnavigation": "^1.2.1",

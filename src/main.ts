@@ -5,6 +5,8 @@ import store from '@/store/index';
 import checkView from 'vue-check-view';
 import headroom from 'vue-headroom';
 
+import VueMq from 'vue-mq';
+
 Vue.config.productionTip = false;
 
 // Add keycode specific events to app for accessibility navigation
@@ -20,6 +22,14 @@ Vue.config.keyCodes = {
 
 Vue.use(checkView);
 Vue.use(headroom);
+Vue.use(VueMq, {
+    breakpoints: { // default breakpoints - customize this
+      sm: 450,
+      md: 1250,
+      lg: Infinity,
+    },
+    defaultBreakpoint: 'sm' // customize this for SSR
+  })
 
 // Initialize the app's store upon first visit to site before routing to a component
 router.beforeEach((to, from, next) => {

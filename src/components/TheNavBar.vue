@@ -60,8 +60,7 @@ export default class TheNavBar extends Vue {
     @import '../styles/_settings';
 
     .navbar__logo {
-        width: $headerHeight;
-        height: $headerHeight;
+        @extend logo;
     }
 
     .navbar__main-menu {

@@ -1,6 +1,8 @@
 <template>
     <vue-headroom
-            :disabled="this.$route.path.includes('content')"
+            :disabled="$mq !== 'lg' || this.$route.path.includes('content')"
+            :upTolerance="$mg !== 'lg' ? 0 : null"
+            :downTolerance="$mg !== 'lg' ? 5 : null"
             :classes="{
                 initial :   'site-headroom',
                 pinned :    'site-headroom--pinned',
@@ -10,6 +12,7 @@
                 bottom :    'site-headroom--bottom',
                 notBottom : 'site-headroom--not-bottom'
             }"
+            class="site-header-container"
             :class="{'site-headroom--hidden': this.$route.path.includes('content')}"
             :speed="350"
             :z-index="9"
@@ -24,7 +27,7 @@
                     <img class="site-header__title" src="@/assets/plenum-title.svg">
                 </router-link>
                 <img
-                    :class="{'site-header__subtitle--hidden': this.$route.path.includes('publications')}"
+                    :class="{'site-header__subtitle--hidden': $mq === 'sm' || this.$route.path.includes('publications')}"
                     class="site-header__subtitle"
                     src="@/assets/plenum-subtitle.svg"
                 >
@@ -56,9 +59,10 @@ export default class TheSiteHeader extends Vue {
 <style lang="scss" scoped>
     @import '../styles/_settings';
 
-    .site-headroom {
-        width: $appWidth;
-        height: $headerHeight;
+    .site-header-container {
+        @extend header;
+        box-shadow: 0 -50px 30px 72px #faf7f7;
+        background: $bgColor;
     }
 
     .site-headroom--hidden {
@@ -71,13 +75,21 @@ export default class TheSiteHeader extends Vue {
 
     .site-header {
         position: absolute;
-        width: calc(#{$appWidth} - #{$headerHeight} - #{$rightPageNavWidth});
-        height: $headerHeight;
+        //width: calc(#{$appWidth} - #{$headerHeight} - #{$rightPageNavWidth});
+        height: 100%;
         left: $lefterWidth;
 
         padding-right: calc(#{$lefterWidth / 2});
 
-        background: $bgColor;
+        @media screen and (max-width: $breakSmall) {
+            width: 100%;
+            left: 72px;
+            top: 6px;
+        }
+        @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
+            width: 100%;
+            top: 10px;
+        }
     }
 
     .site-header__title-container {

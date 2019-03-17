@@ -353,8 +353,8 @@ export default class TextArticle extends Vue {
         max-width: 850px;
 
         padding: 5vw;
-        margin: $headerHeight auto $pageMargin auto;
-        //margin: 0 auto $pageMargin auto;
+        //margin: $headerHeight auto $pageMargin auto;
+        margin: 0 auto $pageMargin auto;
 
         background: #fafafa;
 

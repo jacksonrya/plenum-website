@@ -1,10 +1,13 @@
+// Responsive breakpoints
+$breakSmall: 450px;
+$breakMedium: 1250px;
+
 // Fonts
 $sansSerifFont: 'Avenir', 'Open Sans', sans-serif;
 $serifFont: 'Amiri', serif;
 
 // Site Structure
 $appWidth: 98vw;
-$headerHeight: 120px;
 $footerHeight: 50px;
 $lefterWidth: 120px;
 $rightPageNavWidth: 360px;
@@ -19,4 +22,31 @@ $buttonTextCenterAdjustment: 3px;
 $flyoutFontSize: 1.75em;
 
 // Color
-$bgColor: #fefefe;
+$bgColor: rgb(250, 247, 247);
+
+header {
+    width: 100%;
+    height: 120px;
+
+    @media screen and (max-width: $breakSmall) {
+        width: 100%;
+        height: 60px;
+    }
+    @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
+        width: 100%;
+        height: 100px;
+    }
+}
+
+logo {
+    @media screen and (max-width: $breakSmall) {
+        width: 72px;
+        height: 72px;
+        border: 5px;
+    }
+    @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
+        width: 120px;
+        height: 120px;
+        border: 3px;
+    }
+}

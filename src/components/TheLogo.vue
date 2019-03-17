@@ -64,8 +64,8 @@ export default class TheLogo extends Vue {
 
     .logo {
         position: relative;
-        top: 50%;
-        transform: translateY(-50%);
+        // top: 50%;
+        // transform: translateY(-50%);
 
         //padding: 20px;
 

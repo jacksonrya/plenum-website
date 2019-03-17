@@ -13,7 +13,7 @@ import vueConfig from '../vue.config.js';
 Vue.use(Router);
 
 export default new Router({
-    base: vueConfig.baseUrl,
+    base: vueConfig.publicPath,
     mode: 'history',
     routes: [
         {

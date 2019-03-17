@@ -149,9 +149,18 @@ export default class App extends Vue {
         top: 0;
         left: 0;
         width: calc(#{$appWidth} - #{$lefterWidth} * 1.5);
-        padding: $headerHeight 0 0 calc(#{$lefterWidth} * 1.5);
+        padding: 120px 0 0 calc(#{$lefterWidth} * 1.5);
+        // padding: 0 0 0 calc(#{$lefterWidth} * 1.5);
 
         overflow-x: hidden;
+
+        @media screen and (max-width: $breakSmall) {
+            padding: 72px 0 0 calc(#{$lefterWidth} * 1.5);
+
+        }
+        @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
+            padding: 100px 0 0 calc(#{$lefterWidth} * 1.5);
+        }
     }
 
     .site-footer {
