@@ -1,6 +1,6 @@
 <template>
     <vue-headroom
-            :disabled="$mq !== 'lg' || this.$route.path.includes('content')"
+            :disabled="true || $mq !== 'lg' || this.$route.path.includes('content')"
             :upTolerance="$mg !== 'lg' ? 0 : null"
             :downTolerance="$mg !== 'lg' ? 5 : null"
             :classes="{
@@ -14,7 +14,7 @@
             }"
             class="site-header-container"
             :class="{'site-headroom--hidden': this.$route.path.includes('content')}"
-            :speed="350"
+            :speed="500"
             :z-index="9"
     >
         <header class="site-header">
@@ -70,7 +70,7 @@ export default class TheSiteHeader extends Vue {
     }
 
     .site-headroom--not-top.site-headroom--pinned > .site-header {
-        border-bottom: 1px solid black;
+        // border-bottom: 1px solid black;
     }
 
     .site-header {

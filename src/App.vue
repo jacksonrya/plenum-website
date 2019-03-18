@@ -111,6 +111,9 @@ export default class App extends Vue {
         margin-block-end: 0;
         font-size: 12px;
         text-decoration: none;
+        @media screen and (max-width: $breakSmall) {
+            font-size: 0.9em;
+        }
     }
 
     body {
@@ -130,6 +133,10 @@ export default class App extends Vue {
         font-family: $sansSerifFont;
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
+
+        @media screen and (max-width: $breakSmall) {
+            width: 100vw;
+        }
     }
 
     .app__overlay {
@@ -155,8 +162,8 @@ export default class App extends Vue {
         overflow-x: hidden;
 
         @media screen and (max-width: $breakSmall) {
-            padding: 72px 0 0 calc(#{$lefterWidth} * 1.5);
-
+            padding: 72px 0 0 0;
+            width: 100%;
         }
         @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
             padding: 100px 0 0 calc(#{$lefterWidth} * 1.5);
@@ -168,7 +175,8 @@ export default class App extends Vue {
         bottom: 0;
         width: 100%;
         height: $footerHeight;
-        background: transparent;
+        background: #faf7f7;
+        box-shadow: 0 50px 30px 72px #faf7f7;
     }
 
 

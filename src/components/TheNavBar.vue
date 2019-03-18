@@ -64,6 +64,9 @@ export default class TheNavBar extends Vue {
     }
 
     .navbar__main-menu {
+        @media screen and (max-width: $breakSmall) {
+            display: none;
+        }
         margin-top: $headingCardHeight;
     }
 
