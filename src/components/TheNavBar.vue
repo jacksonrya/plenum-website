@@ -6,6 +6,7 @@
         ></the-logo>
         <nav
             class="navbar__main-menu"
+            :class="{'navbar__main-menu--hidden': $mq == 'sm' && !mobileMenuOpen}"
             role="navigation"
             aria-label="Plenum Main Navigation"
         >
@@ -33,6 +34,9 @@ import TheLogo from './TheLogo';
         ...mapGetters({
             "menuTree": 'menuTree/menuTree'
         })
+    },
+    props: {
+        mobileMenuOpen: Boolean
     }
 })
 
@@ -64,10 +68,16 @@ export default class TheNavBar extends Vue {
     }
 
     .navbar__main-menu {
-        @media screen and (max-width: $breakSmall) {
-            display: none;
-        }
+        // @media screen and (max-width: $breakSmall) {
+        //     display: none;
+        // }
         margin-top: $headingCardHeight;
+    }
+
+    .navbar__main-menu--hidden {
+        // transition: 300ms ease-in;
+        // opacity: 0;
+        display: none;
     }
 
     .navbar__about {

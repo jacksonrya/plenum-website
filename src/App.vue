@@ -11,13 +11,16 @@
         <transition appear>
             <the-nav-bar
                 class="lefter"
+
+                :mobileMenuOpen="mobileMenuOpen"
+
                 @logoLinkActivated="handleLogoLinkActivation"
                 @revertMenuSession="revertMenuSession"
                 @openContent="handleOpenContentEvent"
             ></the-nav-bar>
         </transition>
 
-        <the-site-header></the-site-header>
+        <the-site-header @menuButtonClick="handleMenuButtonClick"></the-site-header>
 
         <transition
             name="component-fade"
@@ -53,9 +56,14 @@ import TheSiteHeader from './components/TheSiteHeader';
 })
 
 export default class App extends Vue {
+    private mobileMenuOpen = false;
 
     constructor() {
         super();
+    }
+
+    private handleMenuButtonClick() {
+        this.mobileMenuOpen = !this.mobileMenuOpen;
     }
 
     private handleMenuBackgroundClickEvent(): void {

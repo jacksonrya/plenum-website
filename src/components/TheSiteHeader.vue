@@ -32,16 +32,22 @@
                     src="@/assets/plenum-subtitle.svg"
                 >
             </div>
+            <the-menu-button 
+                v-show="$mq == 'sm'"
+                class="site-header__menu-button"
+                @buttonClick="handleMenuButtonClick"
+            ></the-menu-button>
         </header>
     </vue-headroom>
 </template>
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
+import TheMenuButton from '@/components/TheMenuButton';
 
 @Component({
     components: {
-
+        TheMenuButton
     },
 })
 
@@ -51,6 +57,11 @@ import {Component, Prop, Vue} from 'vue-property-decorator';
 export default class TheSiteHeader extends Vue {
     constructor() {
         super();
+    }
+
+    handleMenuButtonClick() {
+        this.$emit('menuButtonClick')
+        console.log('menu button clicked')
     }
 }
 
@@ -125,5 +136,14 @@ export default class TheSiteHeader extends Vue {
         opacity: 0;
 
         transition: opacity 0.3s ease;
+    }
+
+    // TODO: make the same size as the logo
+    .site-header__menu-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 25px;
+        height: 25px;
     }
 </style>
