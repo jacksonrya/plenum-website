@@ -1,8 +1,8 @@
 <template>
     <vue-headroom
             :disabled="true || $mq !== 'lg' || this.$route.path.includes('content')"
-            :upTolerance="$mg !== 'lg' ? 0 : null"
-            :downTolerance="$mg !== 'lg' ? 5 : null"
+            :upTolerance="$mq !== 'lg' ? 0 : null"
+            :downTolerance="$mq !== 'lg' ? 5 : null"
             :classes="{
                 initial :   'site-headroom',
                 pinned :    'site-headroom--pinned',
