@@ -17,7 +17,12 @@
             :speed="500"
             :z-index="9"
     >
-        <header class="site-header">
+        <div class="site-header__background"></div>
+        <header class="site-header"> 
+            <the-logo
+                class="site-header__logo"
+                @logoLinkActivated="logoLinkActivated"
+            ></the-logo>
             <div class="site-header__title-container">
                 <router-link
                     to="/"
@@ -44,10 +49,13 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
 import TheMenuButton from '@/components/TheMenuButton';
+import TheLogo from './TheLogo';
+
 
 @Component({
     components: {
-        TheMenuButton
+        TheMenuButton,
+        TheLogo
     },
 })
 
@@ -63,6 +71,11 @@ export default class TheSiteHeader extends Vue {
         this.$emit('menuButtonClick')
         console.log('menu button clicked')
     }
+
+    // Emits logo click event to parent
+    private logoLinkActivated() {
+        this.$emit('logoLinkActivated')
+    }
 }
 
 </script>
@@ -72,8 +85,9 @@ export default class TheSiteHeader extends Vue {
 
     .site-header-container {
         @extend header;
-        box-shadow: 0 -50px 30px 72px #faf7f7;
-        background: $bgColor;
+        // box-shadow: 0 -50px 30px 72px #faf7f7;
+        // background: $bgColor;
+        background: transparent;
     }
 
     .site-headroom--hidden {
@@ -88,14 +102,13 @@ export default class TheSiteHeader extends Vue {
         position: absolute;
         //width: calc(#{$appWidth} - #{$headerHeight} - #{$rightPageNavWidth});
         height: 100%;
-        left: $lefterWidth;
+        display: flex;
+        justify-content: flex-start;
 
         padding-right: calc(#{$lefterWidth / 2});
 
         @media screen and (max-width: $breakSmall) {
             width: 100%;
-            left: 72px;
-            top: 6px;
         }
         @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
             width: 100%;
@@ -103,11 +116,30 @@ export default class TheSiteHeader extends Vue {
         }
     }
 
-    .site-header__title-container {
+    .site-header__background {
         position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100px;
+        background: $bgColor;
+        box-shadow: 0 -50px 30px 72px $bgColor;
+
+        @media screen and (max-width: $breakSmall) {
+            height: 60px;
+        }
+    }
+
+    .site-header__logo {
+        @extend logo;
+    }
+
+    .site-header__title-container {
+        position: relative;
         left: 0;
         top: 50%;
         transform: translateY(-50%);
+        height: fit-content;
     }
 
     .site-header__title-container a:focus {
@@ -133,15 +165,14 @@ export default class TheSiteHeader extends Vue {
     }
 
     .site-header__subtitle--hidden {
-        opacity: 0;
-
-        transition: opacity 0.3s ease;
+        display: none;
     }
 
     // TODO: make the same size as the logo
     .site-header__menu-button {
         position: fixed;
-        top: 20px;
+        top: 50%;
+        transform: translateY(-50%);
         right: 20px;
         width: 25px;
         height: 25px;

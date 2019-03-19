@@ -14,13 +14,12 @@
 
                 :mobileMenuOpen="mobileMenuOpen"
 
-                @logoLinkActivated="handleLogoLinkActivation"
                 @revertMenuSession="revertMenuSession"
                 @openContent="handleOpenContentEvent"
             ></the-nav-bar>
         </transition>
 
-        <the-site-header @menuButtonClick="handleMenuButtonClick"></the-site-header>
+        <the-site-header @menuButtonClick="handleMenuButtonClick" @logoLinkActivated="handleLogoLinkActivation"></the-site-header>
 
         <transition
             name="component-fade"

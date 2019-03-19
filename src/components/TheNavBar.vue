@@ -1,9 +1,5 @@
 <template>
     <div>
-        <the-logo
-            class="navbar__logo"
-            @logoLinkActivated="logoLinkActivated"
-        ></the-logo>
         <nav
             class="navbar__main-menu"
             :class="{'navbar__main-menu--hidden': $mq == 'sm' && !mobileMenuOpen}"
@@ -53,19 +49,11 @@ export default class TheNavBar extends Vue {
 
     @Emit('revertMenuSession')
     private revertMenuSession(): void {}
-
-    // Emits logo click event to parent
-    @Emit('logoLinkActivated')
-    private logoLinkActivated(): void {}
 }
 </script>
 
 <style lang="scss" scoped>
     @import '../styles/_settings';
-
-    .navbar__logo {
-        @extend logo;
-    }
 
     .navbar__main-menu {
         // @media screen and (max-width: $breakSmall) {
