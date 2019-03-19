@@ -173,7 +173,7 @@ export default class TheSiteHeader extends Vue {
         position: fixed;
         top: 50%;
         transform: translateY(-50%);
-        right: 65px;
+        right: 20px;
         width: 25px;
         height: 25px;
     }

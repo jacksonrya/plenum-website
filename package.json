@@ -17,7 +17,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --open",
-    "estage": "vue-cli-service serve --mode staging",
+    "estage": "vue-cli-service serve --mode staging --",
     "stage": "vue-cli-service build --mode staging",
     "build": "vue-cli-service build",
     "test": "vue-cli-service test",
