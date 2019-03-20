@@ -20,6 +20,7 @@
         </transition>
 
         <the-site-header
+            headerTitle=""
             :backgroundColor="styles.backgroundColors.default"
             @openMenu="handleOpenMenu"
             @closeMenu="handleCloseMenu"

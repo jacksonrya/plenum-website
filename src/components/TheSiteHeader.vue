@@ -23,8 +23,8 @@
                 class="site-header__logo"
                 @logoLinkActivated="logoLinkActivated"
             ></the-logo>
-            <div class="site-header__title-container">
-                <div class="website-header">
+            <div class="site-header__title-container" :class="{'site-header__title-container--centered': headerTitle.length !== 0}">
+                <div v-if="headerTitle.length == 0" class="title__website">
                     <router-link
                         to="/"
                         title="Return to Home"
@@ -37,6 +37,9 @@
                         :class="{'site-header__subtitle--hidden': $mq === 'sm' || this.$route.path.includes('publications')}"
                         src="@/assets/plenum-subtitle.svg"
                     >
+                </div>
+                <div v-else class="title__field">
+                    {{headerTitle}}
                 </div>
             </div>
             <the-menu-button 
@@ -61,7 +64,11 @@ import TheLogo from './TheLogo';
         TheLogo
     },
     props: {
-        backgroundColor: String
+        backgroundColor: String,
+        headerTitle: {
+            type: String,
+            default: ''
+        }
     }
 })
 
@@ -69,6 +76,7 @@ import TheLogo from './TheLogo';
 // Disappears when
 // Required properties:
 export default class TheSiteHeader extends Vue {
+
     constructor() {
         super();
     }
@@ -150,6 +158,12 @@ export default class TheSiteHeader extends Vue {
         height: fit-content;
     }
 
+    .site-header__title-container--centered {
+        flex-grow: 1;
+        left: -50%;
+        transform: translate(50%, -50%);
+    }
+
     .site-header__title-container a:focus {
         outline: none;
     }
@@ -184,5 +198,11 @@ export default class TheSiteHeader extends Vue {
         right: 20px;
         width: 25px;
         height: 25px;
+    }
+
+    .title__field {
+        font-family: 'Amiri';
+        font-size: 3em;
+        border-bottom: 3px solid black;
     }
 </style>
