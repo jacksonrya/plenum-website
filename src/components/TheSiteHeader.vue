@@ -17,7 +17,7 @@
             :speed="500"
             :z-index="9"
     >
-        <div class="site-header__background"></div>
+        <div class="site-header__background" :style="{'background': backgroundColor, 'box-shadow': `0 -50px 30px 72px ${backgroundColor}`}"></div>
         <header class="site-header"> 
             <the-logo
                 class="site-header__logo"
@@ -57,6 +57,9 @@ import TheLogo from './TheLogo';
         TheMenuButton,
         TheLogo
     },
+    props: {
+        backgroundColor: String
+    }
 })
 
 // The header for the entire site

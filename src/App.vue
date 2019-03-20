@@ -19,7 +19,11 @@
             ></the-nav-bar>
         </transition>
 
-        <the-site-header @menuButtonClick="handleMenuButtonClick" @logoLinkActivated="handleLogoLinkActivation"></the-site-header>
+        <the-site-header
+            :backgroundColor="styles.backgroundColors.default"
+            @menuButtonClick="handleMenuButtonClick"
+            @logoLinkActivated="handleLogoLinkActivation"
+        ></the-site-header>
 
         <transition
             name="component-fade"
@@ -45,6 +49,8 @@ import Home from '@/views/Home';
 import TheSiteFooter from './components/TheSiteFooter';
 import TheSiteHeader from './components/TheSiteHeader';
 
+import styles from '@/lib/styles.js';
+
 @Component({
     components: {
         TheSiteHeader,
@@ -56,6 +62,7 @@ import TheSiteHeader from './components/TheSiteHeader';
 
 export default class App extends Vue {
     private mobileMenuOpen = false;
+    private styles = styles;
 
     constructor() {
         super();
