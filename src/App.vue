@@ -45,8 +45,7 @@
     </div>
 </template>
 
-<script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+<script>
 import TheNavBar from '@/components/TheNavBar';
 import Home from '@/views/Home';
 import TheSiteFooter from './components/TheSiteFooter';
@@ -54,67 +53,76 @@ import TheSiteHeader from './components/TheSiteHeader';
 
 import styles from '@/lib/styles.js';
 
-@Component({
+export default {
     components: {
         TheSiteHeader,
         TheSiteFooter,
         TheNavBar,
         Home
-    }
-})
+    },
+    data: function() {
+        return {
+            mobileMenuOpen: false,
+            styles: styles
+        }
+    },
+    methods: {
+        /** */
+        handleOpenMenu: function() {
+            this.mobileMenuOpen = true;
+        },
 
-export default class App extends Vue {
-    private mobileMenuOpen = false;
-    private styles = styles;
+        /** */
+        handleCloseMenu: function() {
+            this.mobileMenuOpen = false;
+        },
 
-    constructor() {
-        super();
-    }
+        /** */
+        handleMenuBackgroundClickEvent: function() {
+            this.revertMenuSession();
+        },
 
-    private handleOpenMenu() {
-        this.mobileMenuOpen = true;
-    }
+        /**
+         * Process to handle logo click event
+         */
+        handleLogoLinkActivation: function() {
+            this.$router.push('/');
+            let visitCount = this.$store.getters['routerNav/getVisitCount'];
+            if (visitCount > 0) {
+                this.$store.dispatch('routerNav/resetVisitCount');
+                this.$store.dispatch('menuTree/closeMenuExpansions');
+            }
+        },
 
-    private handleCloseMenu() {
-        this.mobileMenuOpen = false;
-    }
-
-    private handleMenuBackgroundClickEvent(): void {
-        this.revertMenuSession();
-    }
-
-    // Process to handle logo click event
-    private handleLogoLinkActivation(): void {
-        this.$router.push('/');
-        let visitCount = this.$store.getters['routerNav/getVisitCount'];
-        if (visitCount > 0) {
+        /**
+         * Handles the event from the user requesting an article
+         * @param {string} routerLinkLocation
+         * @param {boolean} keyboardEvent
+         */
+        handleOpenContentEvent: function(routerLinkLocation, keyBoardEvent) {
+            this.mobileMenuOpen = false;
             this.$store.dispatch('routerNav/resetVisitCount');
+            if (keyBoardEvent) {
+                this.$router.push(routerLinkLocation);
+            }
+            this.$store.dispatch('menuTree/closeMenuExpansions');
+        },
+
+        /**
+         * Returns the app to the state that was before the menu session
+         */
+        revertMenuSession: function() {
+            let visitCount = this.$store.getters['routerNav/getVisitCount'];
+            // If menu session didn't include clicked publication links
+            if (visitCount > 0) {
+                this.$router.go(visitCount * -1);
+                this.$store.dispatch('routerNav/resetVisitCount');
+            } else if (this.$route.path.includes('publications')) { // if menu session began open b/c first visit to site was to collection
+                this.$router.push('/');
+                this.$store.dispatch('routerNav/resetVisitCount');
+            }
             this.$store.dispatch('menuTree/closeMenuExpansions');
         }
-    }
-
-    // Handles the event from the user requesting an article
-    private handleOpenContentEvent(routerLinkLocation: string, keyBoardEvent: boolean) {
-        this.mobileMenuOpen = false;
-        this.$store.dispatch('routerNav/resetVisitCount');
-        if (keyBoardEvent) {
-            this.$router.push(routerLinkLocation);
-        }
-        this.$store.dispatch('menuTree/closeMenuExpansions');
-    }
-
-    // Returns the app to the state that was before the menu session
-    private revertMenuSession(): void {
-        let visitCount = this.$store.getters['routerNav/getVisitCount'];
-        // If menu session didn't include clicked publication links
-        if (visitCount > 0) {
-            this.$router.go(visitCount * -1);
-            this.$store.dispatch('routerNav/resetVisitCount');
-        } else if (this.$route.path.includes('publications')) { // if menu session began open b/c first visit to site was to collection
-            this.$router.push('/');
-            this.$store.dispatch('routerNav/resetVisitCount');
-        }
-        this.$store.dispatch('menuTree/closeMenuExpansions');
     }
 }
 </script>

@@ -33,29 +33,20 @@
     </div>
 </template>
 
-<script lang="ts">
-import {Component, Emit, Prop, Vue} from 'vue-property-decorator';
+<script>
 import { mapGetters } from 'vuex';
 
-@Component({
-    components: {
-
-    },
+export default {
     computed: {
         ...mapGetters({
             appLoading: 'appLoading',
         })
+    },
+    methods: {
+        logoLinkActivated: function() {
+            this.$emit('logoLinkActivated')
+        }
     }
-})
-
-// The main logo for the site
-export default class TheLogo extends Vue {
-    constructor() { super(); }
-
-    // Emits click event upon logo link to parent
-    @Emit('logoLinkActivated')
-    private logoLinkActivated() {}
-
 }
 </script>
 

@@ -53,13 +53,12 @@
     </vue-headroom>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+<script>
 import TheMenuButton from '@/components/TheMenuButton';
 import TheLogo from './TheLogo';
 
-
-@Component({
+// The header for the entire site
+export default {
     components: {
         TheMenuButton,
         TheLogo
@@ -71,31 +70,20 @@ import TheLogo from './TheLogo';
             default: ''
         },
         mobileMenuOpen: Boolean
-    }
-})
-
-// The header for the entire site
-// Disappears when
-// Required properties:
-export default class TheSiteHeader extends Vue {
-
-    constructor() {
-        super();
-    }
-
-    handleOpenMenu() {
-        this.$emit('openMenu')
-    }
-    handleCloseMenu() {
-        this.$emit('closeMenu')
-    }
-
-    // Emits logo click event to parent
-    private logoLinkActivated() {
-        this.$emit('logoLinkActivated')
+    },
+    methods: {
+        handleOpenMenu: function() {
+            this.$emit('openMenu')
+        },
+        handleCloseMenu: function() {
+            this.$emit('closeMenu')
+        },
+        // Emits logo click event to parent
+        logoLinkActivated: function() {
+            this.$emit('logoLinkActivated')
+        }
     }
 }
-
 </script>
 
 <style lang="scss" scoped>
