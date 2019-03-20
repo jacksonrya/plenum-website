@@ -1,6 +1,6 @@
 <template>
     <div class="menu-button">
-        <div v-if="menuClosed" @click="handleMenuButtonClick">
+        <div v-if="closed" @click="handleMenuButtonClick">
             <img class="menu-button" src="@/assets/menu-button.svg">
         </div>
         <div v-else @click="handleCloseButtonClick" src="@/assets/close-button.svg">
@@ -15,25 +15,29 @@ import {Component, Prop, Vue} from 'vue-property-decorator';
 @Component({
     components: {
         
+    },
+    props: {
+        closed: {
+            type: Boolean,
+            default: false
+        }
     }
 })
 
 // The menu button for non-desktop scenarios
 // Required properties:
 export default class TheMenuButton extends Vue {
-    private menuClosed = true;
-
     constructor() {
         super();
     }
 
     handleMenuButtonClick() {
-        this.menuClosed = false;
+        // this.closed = false;
         this.$emit("menuClick")
     }
 
     handleCloseButtonClick() {
-        this.menuClosed = true;
+        // this.closed = true;
         this.$emit("closeClick")
     }
 }

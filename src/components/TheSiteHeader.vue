@@ -45,6 +45,7 @@
             <the-menu-button 
                 v-show="$mq == 'sm'"
                 class="site-header__menu-button"
+                :closed="!mobileMenuOpen"
                 @menuClick="handleOpenMenu"
                 @closeClick="handleCloseMenu"
             ></the-menu-button>
@@ -68,7 +69,8 @@ import TheLogo from './TheLogo';
         headerTitle: {
             type: String,
             default: ''
-        }
+        },
+        mobileMenuOpen: Boolean
     }
 })
 

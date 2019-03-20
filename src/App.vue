@@ -22,6 +22,7 @@
         <the-site-header
             headerTitle=""
             :backgroundColor="styles.backgroundColors.default"
+            :mobileMenuOpen="mobileMenuOpen"
             @openMenu="handleOpenMenu"
             @closeMenu="handleCloseMenu"
             @logoLinkActivated="handleLogoLinkActivation"
@@ -94,6 +95,7 @@ export default class App extends Vue {
 
     // Handles the event from the user requesting an article
     private handleOpenContentEvent(routerLinkLocation: string, keyBoardEvent: boolean) {
+        this.mobileMenuOpen = false;
         this.$store.dispatch('routerNav/resetVisitCount');
         if (keyBoardEvent) {
             this.$router.push(routerLinkLocation);
