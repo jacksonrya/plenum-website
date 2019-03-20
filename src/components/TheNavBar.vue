@@ -63,7 +63,11 @@ export default class TheNavBar extends Vue {
 
         @media screen and (max-width: $breakSmall) {
             position: relative;
-            margin-top: 85px;
+            width: 100%;
+            height: 100%;
+            margin-top: 0;
+            padding-top: 25px;
+            background: $bgColor;
         }
     }
 

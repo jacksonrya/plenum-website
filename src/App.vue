@@ -172,6 +172,12 @@ export default class App extends Vue {
         left: 0;
         width: $lefterWidth;
         z-index: 10;
+
+        @media screen and (max-width: $breakSmall) {
+            height: 100%;
+            margin-top: 60px;
+            width: 100vw;
+        }
     }
 
     .content-section {
