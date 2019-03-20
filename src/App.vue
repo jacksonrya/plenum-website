@@ -197,9 +197,11 @@ export default class App extends Vue {
         height: $footerHeight;
         background: #faf7f7;
         box-shadow: 0 50px 30px 72px #faf7f7;
+
+        @media screen and (max-width: $breakSmall) {
+            font-size: 1.5em;
+        }
     }
-
-
 
     .component-fade-enter-active, .component-fade-leave-active {
         transition: opacity .3s ease;

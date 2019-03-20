@@ -60,6 +60,11 @@ export default class TheNavBar extends Vue {
         //     display: none;
         // }
         margin-top: $headingCardHeight;
+
+        @media screen and (max-width: $breakSmall) {
+            position: relative;
+            margin-top: 85px;
+        }
     }
 
     .navbar__main-menu--hidden {

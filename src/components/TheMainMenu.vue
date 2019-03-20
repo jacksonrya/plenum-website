@@ -1,7 +1,7 @@
 <template>
     <ul
         class="main-menu"
-        :class="{'main-menu--expanded': navHovered || anyMenuIsOpen || focusedIndex > -1, 'main-menu--active': anyMenuIsOpen}"
+        :class="{'main-menu--expanded': $mq == 'sm' || navHovered || anyMenuIsOpen || focusedIndex > -1, 'main-menu--active': anyMenuIsOpen}"
         role="menubar"
         aria-label="Plenum Main Navigation"
         :aria-expanded="(navHovered || focusedIndex !== -1).toString()"
@@ -283,12 +283,20 @@ export default class TheMainMenu extends Vue {
         background: $bgColor;
 
         transition: width 0.3s ease;
+
+        @media screen and (max-width: $breakSmall) {
+            left: 0;
+        }
     }
 
     .main-menu--expanded {
         width: $menuItemWidth;
 
         transition: width 0.3s ease;
+
+        @media screen and (max-width: $breakSmall) {
+            width: 90vw;
+        }
     }
 
     .main-menu--active {
@@ -303,6 +311,12 @@ export default class TheMainMenu extends Vue {
         margin: 15px 0;
 
         line-height: calc(#{$menuItemHeight} + #{$buttonTextCenterAdjustment});
+
+        @media screen and (max-width: $breakSmall) {
+            width: 90vw;
+            height: 65px;
+            margin-bottom: 20px;
+        }
     }
 
     .main-menu__menu-item:first-child {
@@ -330,6 +344,12 @@ export default class TheMainMenu extends Vue {
         text-align: right;
         font-size: 2em;
         font-weight: bold;
+
+        @media screen and (max-width: $breakSmall) {
+            position: relative;
+            transform: translateY(25%);
+            font-size: 5em;
+        }
     }
 
     .main-menu__menu-item--active-hovered {
