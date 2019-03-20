@@ -24,23 +24,26 @@
                 @logoLinkActivated="logoLinkActivated"
             ></the-logo>
             <div class="site-header__title-container">
-                <router-link
-                    to="/"
-                    title="Return to Home"
-                    tabindex="-1"
-                >
-                    <img class="site-header__title" src="@/assets/plenum-title.svg">
-                </router-link>
-                <img
-                    :class="{'site-header__subtitle--hidden': $mq === 'sm' || this.$route.path.includes('publications')}"
-                    class="site-header__subtitle"
-                    src="@/assets/plenum-subtitle.svg"
-                >
+                <div class="website-header">
+                    <router-link
+                        to="/"
+                        title="Return to Home"
+                        tabindex="-1"
+                    >
+                        <img class="site-header__title" src="@/assets/plenum-title.svg">
+                    </router-link>
+                    <img
+                        class="site-header__subtitle"
+                        :class="{'site-header__subtitle--hidden': $mq === 'sm' || this.$route.path.includes('publications')}"
+                        src="@/assets/plenum-subtitle.svg"
+                    >
+                </div>
             </div>
             <the-menu-button 
                 v-show="$mq == 'sm'"
                 class="site-header__menu-button"
-                @buttonClick="handleMenuButtonClick"
+                @menuClick="handleOpenMenu"
+                @closeClick="handleCloseMenu"
             ></the-menu-button>
         </header>
     </vue-headroom>
@@ -70,9 +73,11 @@ export default class TheSiteHeader extends Vue {
         super();
     }
 
-    handleMenuButtonClick() {
-        this.$emit('menuButtonClick')
-        console.log('menu button clicked')
+    handleOpenMenu() {
+        this.$emit('openMenu')
+    }
+    handleCloseMenu() {
+        this.$emit('closeMenu')
     }
 
     // Emits logo click event to parent

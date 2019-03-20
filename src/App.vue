@@ -21,7 +21,8 @@
 
         <the-site-header
             :backgroundColor="styles.backgroundColors.default"
-            @menuButtonClick="handleMenuButtonClick"
+            @openMenu="handleOpenMenu"
+            @closeMenu="handleCloseMenu"
             @logoLinkActivated="handleLogoLinkActivation"
         ></the-site-header>
 
@@ -68,8 +69,12 @@ export default class App extends Vue {
         super();
     }
 
-    private handleMenuButtonClick() {
-        this.mobileMenuOpen = !this.mobileMenuOpen;
+    private handleOpenMenu() {
+        this.mobileMenuOpen = true;
+    }
+
+    private handleCloseMenu() {
+        this.mobileMenuOpen = false;
     }
 
     private handleMenuBackgroundClickEvent(): void {
