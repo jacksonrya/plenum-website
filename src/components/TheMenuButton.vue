@@ -9,47 +9,26 @@
     </div>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-
-@Component({
-    components: {
-        
-    },
+<script>
+export default {
     props: {
+        // Whether or not the menu is closed
         closed: {
             type: Boolean,
             default: false
         }
-    }
-})
-
-// The menu button for non-desktop scenarios
-// Required properties:
-export default class TheMenuButton extends Vue {
-    constructor() {
-        super();
-    }
-
-    handleMenuButtonClick() {
-        // this.closed = false;
-        this.$emit("menuClick")
-    }
-
-    handleCloseButtonClick() {
-        // this.closed = true;
-        this.$emit("closeClick")
+    },
+    methods: {
+        handleMenuButtonClick: function() {
+            this.$emit("menuClick")
+        },
+        handleCloseButtonClick: function() {
+            this.$emit("closeClick")
+        }
     }
 }
-
 </script>
 
 <style lang="scss" scoped>
-    @import '../styles/_settings';
-
-    .menu-button {
-        position: relative;
-        width: 100%;
-        height: 100%;
-    }
+    // @import '../styles/_settings';
 </style>
