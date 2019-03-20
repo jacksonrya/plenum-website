@@ -72,9 +72,8 @@ export default class TheNavBar extends Vue {
     }
 
     .navbar__main-menu--hidden {
-        // transition: 300ms ease-in;
+        // transition: 300ms linear;
         // opacity: 0;
-        display: none;
     }
 
     .navbar__about {

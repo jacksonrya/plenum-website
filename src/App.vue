@@ -11,6 +11,7 @@
         <transition appear>
             <the-nav-bar
                 class="lefter"
+                :class="{'lefter__mobile--menu-open': $mq === 'sm' && mobileMenuOpen}"
 
                 :mobileMenuOpen="mobileMenuOpen"
 
@@ -181,11 +182,22 @@ export default {
         width: $lefterWidth;
         z-index: 10;
 
+
         @media screen and (max-width: $breakSmall) {
+            transform: translateX(-100vw);
+            transition: 300ms ease-in;
+
+            // left: -100vw;
             height: 100%;
             margin-top: 60px;
             width: 100vw;
         }
+    }
+
+    .lefter__mobile--menu-open {
+        transform: translateX(0vw);
+        // left: 0;
+        transition: 300ms ease-out;
     }
 
     .content-section {
