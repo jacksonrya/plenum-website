@@ -181,7 +181,7 @@ export default {
         left: 0;
         width: $lefterWidth;
         z-index: 10;
-
+        margin-top: 100px;
 
         @media screen and (max-width: $breakSmall) {
             transform: translateX(-100vw);
