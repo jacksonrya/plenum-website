@@ -10,29 +10,20 @@
     </div>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-
-@Component({
-    components: {
-
-    },
-})
-
-// Submenu associated with a unique main menu entry
-export default class ArticlePreviewsTitleCard extends Vue {
-    @Prop() private article: any;
-
-    constructor() {
-        super();
-    }
-
-    // When this component is loaded, draw a canvas with an animatable Plenum logo
-    public created() {
-// filler
+<script>
+/**
+ * Submenu associated with a unique main menu entry
+ */
+export default {
+    props: {
+        article: {
+            type: Object,
+            default: function() {
+                return {}
+            }
+        }
     }
 }
-
 </script>
 
 <style lang="scss" scoped>

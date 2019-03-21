@@ -88,161 +88,162 @@
     </ul>
 </template>
 
-<script lang="ts">
-import {Component, Emit, Prop, Vue} from 'vue-property-decorator';
+<script>
 import ArticlePreview from '@/components/ArticlePreviews';
 import MainMenuFlyOutSections from '@/components/MainMenuFlyOutSections';
 import { mixin as focusMixin } from 'vue-focus';
 import { mapActions } from 'vuex';
+import { error } from 'util';
 
-@Component({
+/**
+ * Flyout submenu associated with a unique main menu entry
+ */
+export default {
     mixins: [focusMixin],
     components: {
         ArticlePreview,
         MainMenuFlyOutSections,
-    }
-})
-
-// Flyout submenu associated with a unique main menu entry
-export default class MainMenuFlyOut extends Vue {
-    @Prop() private menu!: Object; // Parent menu item
-    private focusedIndex: number; //
-    private collectionsClicked: number; //
-
-    constructor() {
-        super();
-        this.focusedIndex = -1;
-        this.collectionsClicked = 0;
-    }
-
-    // Emits an open event to the parent
-    @Emit('activateMenu')
-    public activateMenu(mainMenuItem: any): void {
-        // Filler
-    }
-
-    @Emit('toggleOpen')
-    public toggleOpen(mainMenuItem: any): void {
-        // Filler
-    }
-
-    @Emit('openArticle')
-    public openArticle() {
-        // Filler
-    }
-
-    @Emit('closeMainMenuFlyOut')
-    public closeMainMenuFlyOut(mainMenuItem: any, wasKeyboardEvent: boolean) {
-        // filler
-    }
-
-    @Emit('collectionActivated')
-    public collectionActivated(submenuLink: {expanded}) {
-        if (submenuLink.expanded) {
-            this.$store.dispatch('menuTree/deactivateAllPreviews');
-        } else {
-            this.$store.dispatch('menuTree/activateSubmenuPreview', submenuLink);
-        }
-    }
-
-    // Moves focus to first submenu item of the menu matching the provided menu title
-    // parameter(s):
-    //      menuTitle = title of the menu to be entered
-    private enterSubmenu(menuTitle: string) {
-        document.getElementById(menuTitle.replace(' ', '') + '-section-menu-item-0').focus();
-    }
-
-    // Reset submenu links to their initialized state except for the provided submenu link
-    // parameter(s) needed:
-    //      exception = the submenu link that is NOT reset
-    // TODO: move to store action
-    private resetAllSubmenuLinksExcept(exception: {uuid}): void {
-        let submenu = [...this.menu.submenu];
-        submenu.forEach(section => {
-            section.submenu.forEach(menuItem => { // Most likely an article collection
-                if (exception.uuid !== menuItem.uuid) {
-                    menuItem.expanded = false;
-                    menuItem.previewVisible = false;
-                } else {
-                    menuItem.expanded = true;
-                    menuItem.previewVisible = true;
-                }
-            })
-        });
-
-        const sectionTitles = Object.keys(this.menu.submenu);
-        for (let i = 0; i < sectionTitles.length; i++) {
-            const submenuLinks: Array<Object> = this.menu.submenu[sectionTitles[i]];
-            for (let j = 0; j < submenuLinks.length; j++) {
-                if (exception.title !== this.menu.submenu[sectionTitles[i]][j].title) {
-                    this.menu.submenu[sectionTitles[i]][j].expanded = false;
-                    this.menu.submenu[sectionTitles[i]][j].previewVisible = false;
-                    // this.menu.submenu[sectionTitles[i]][j].hidden = true;
-                }
+    },
+    props: {
+        menu: {
+            type: Object,
+            default: function() {
+                return {}
             }
         }
-    }
+    },
+    data: {
+        focusedIndex: -1, // -1
+        collectionsClicked: 0 // 0
+    },
+    methods: {
+        activateMenu: function(mainMenuItem) {
+            this.$emit('activateMenu')
+        },
+        toggleOpen: function(mainMenuItem) {
+            this.$emit('toggleOpen')
+        },
+        openArticle: function() {
+            this.$emit('openArticle')
+        },
+        closeMainMenuFlyOut: function(mainMenuItem, wasKeyboardEvent) {
+            this.$emit('closeMainMenuFlyOut')
+        },
+        /**
+         * @param {Object} submenuLink Requires expanded attribute
+         */
+        collectionActivated(submenuLink) {
+            if (!submenuLink.hasOwnProperty('expanded')) {
+                console.error("Missing expanded attribute")
+                return
+            }
+            if (submenuLink.expanded) {
+                this.$store.dispatch('menuTree/deactivateAllPreviews')
+            } else {
+                this.$store.dispatch('menuTree/activateSubmenuPreview', submenuLink)
+            }
+            this.$emit('collectionActivated')
+        },
+        /** 
+         * Moves focus to first submenu item of the menu matching the provided menu title.
+         * @param {string} menuTitle Title of the menu to be entered.
+        */
+        enterSubmenu: function(menuTitle) {
+            document.getElementById(menuTitle.replace(' ', '') + '-section-menu-item-0').focus();
+        },
+        // TODO: move to store action
+        /**
+         * Reset submenu links to their initialized state except for the provided submenu link.
+         * @param {Object} exception The submenu link that is NOT reset.
+         */
+        resetAllSubmenuLinksExcept: function(exception) {
+            if (!exception.hasOwnProperty('uuid')) {
+                throw new Error("Missing uuid property")
+            }
+            let submenu = [...this.menu.submenu];
+            submenu.forEach(section => {
+                section.submenu.forEach(menuItem => { // Most likely an article collection
+                    if (exception.uuid !== menuItem.uuid) {
+                        menuItem.expanded = false;
+                        menuItem.previewVisible = false;
+                    } else {
+                        menuItem.expanded = true;
+                        menuItem.previewVisible = true;
+                    }
+                })
+            });
 
-    //
-    private resetAllSubmenuLinks(): void {
-        // Filler
-    }
-
-    // TODO: import these functions as mixin? to use in all menu components
-    // Move focus down one menu item, or return to first menu item if at the end
-    private moveDown() {
-        this.focusedIndex = this.focusedIndex === Object.keys(this.menu.submenu).length - 1 ? 0 : this.focusedIndex + 1;
-    }
-
-    // Move focus up one menu item, or return to last menu item if at the first
-    private moveUp() {
-        this.focusedIndex = this.focusedIndex === 0 ? Object.keys(this.menu.submenu).length - 1 : this.focusedIndex - 1;
-    }
-
-    // Searches through the menu items and moves focus to the next menu item label that starts with the queried letter
-    // parameter(s):
-    //      queryLetter           = single letter to be queried across menu item labels
-    //      currentlyFocusedIndex = index of the menu item that is currently focused
-    private focusByLetter(queryLetter: string, currentlyFocusedIndex: number) {
-        // If not at the end of the menu...
-        if (currentlyFocusedIndex !== Object.keys(this.menu.submenu).length - 1) {
-            for (let i = currentlyFocusedIndex + 1; i < Object.keys(this.menu.submenu).length; i++) {
-                if (Object.keys(this.menu.submenu)[i].toLowerCase().startsWith(queryLetter)) {
-                    document.getElementById(this.menu.name + '-fly-out-menu-item-' + i).focus(); // fly-out-menu-item-1
+            const sectionTitles = Object.keys(this.menu.submenu);
+            for (let i = 0; i < sectionTitles.length; i++) {
+                const submenuLinks = this.menu.submenu[sectionTitles[i]];
+                for (let j = 0; j < submenuLinks.length; j++) {
+                    if (exception.title !== this.menu.submenu[sectionTitles[i]][j].title) {
+                        this.menu.submenu[sectionTitles[i]][j].expanded = false;
+                        this.menu.submenu[sectionTitles[i]][j].previewVisible = false;
+                        // this.menu.submenu[sectionTitles[i]][j].hidden = true;
+                    }
                 }
             }
-        }
-    }
-
-    // Activates the submenu link and emits an event announcing the submenu's use/ activation
-    // parameter(s) needed:
-    //      item        = main menu item to which this submenu belongs
-    //      sectionName = name of the submenu section of the activated submenu link
-    //      submenuLink = the submenu link to be activated
-    //      isKeyboardEvent = whether or not the native DOM event was from a key press or not
-    private handleSubmenuLinkActivation(mainMenuItem: any,
-                                sectionName: string,
-                                submenuLink: SubmenuLink,
-                                isKeyboardEvent: boolean) {
-        let activatedFlag: boolean = true;
-        // Deactivate all other submenu links, besides the submenu link to be activated
-        for (let i = 0; i < this.menu.submenu[sectionName].length; i++) {
-            const menuItem: SubmenuLink = this.menu.submenu[sectionName][i];
-            this.menu.submenu[sectionName][i].expanded = (menuItem.title === submenuLink.title) && !submenuLink.expanded;
-            if ((menuItem.title === submenuLink.title) && !submenuLink.expanded) {
-                activatedFlag = false;
+        },
+        // TODO: import these functions as mixin? to use in all menu components
+        /**
+         * Move focus down one menu item, or return to first menu item if at the end.
+         */
+        moveDown: function() {
+            this.focusedIndex = this.focusedIndex === Object.keys(this.menu.submenu).length - 1 ? 0 : this.focusedIndex + 1;
+        },
+        /**
+         * Move focus up one menu item, or return to last menu item if at the first.
+         */
+        moveUp: function() {
+            this.focusedIndex = this.focusedIndex === 0 ? Object.keys(this.menu.submenu).length - 1 : this.focusedIndex - 1;
+        },
+        /**
+         * Searches through the menu items and moves focus to the next menu item label that starts with the queried letter.
+         * @param {string} queryLetter Single letter to be queried across menu item labels.
+         * @param {number} currentlyFocusedIndex Index of the menu item that is currently focused.
+         */
+        focusByLetter: function(queryLetter, currentlyFocusedIndex) {
+            // If not at the end of the menu...
+            if (currentlyFocusedIndex !== Object.keys(this.menu.submenu).length - 1) {
+                for (let i = currentlyFocusedIndex + 1; i < Object.keys(this.menu.submenu).length; i++) {
+                    if (Object.keys(this.menu.submenu)[i].toLowerCase().startsWith(queryLetter)) {
+                        document.getElementById(this.menu.name + '-fly-out-menu-item-' + i).focus(); // fly-out-menu-item-1
+                    }
+                }
             }
-        }
+        },
+        /**
+         * Activates the submenu link and emits an event announcing the submenu's use/ activation.
+         * @param {Object}  mainMenuItem Main menu item to which this submenu belongs.
+         * @param {string}  sectionName name of the submenu section of the activated submenu link
+         * @param {Object}  submenuLink the submenu link to be activated
+         * @param {boolean} isKeyboardEvent whether or not the native DOM event was from a key press or not
+         */
+        handleSubmenuLinkActivation: function(mainMenuItem,
+                                    sectionName,
+                                    submenuLink,
+                                    isKeyboardEvent) {
+            let activatedFlag = true;
+            // Deactivate all other submenu links, besides the submenu link to be activated
+            for (let i = 0; i < this.menu.submenu[sectionName].length; i++) {
+                const menuItem = this.menu.submenu[sectionName][i];
+                this.menu.submenu[sectionName][i].expanded = (menuItem.title === submenuLink.title) && !submenuLink.expanded;
+                if ((menuItem.title === submenuLink.title) && !submenuLink.expanded) {
+                    activatedFlag = false;
+                }
+            }
 
-        if (activatedFlag) {
-            this.activateMenu(mainMenuItem);
-            this.resetAllSubmenuLinksExcept(submenuLink);
-            submenuLink.expanded = true;
-            if (isKeyboardEvent) {
-                // Barely delay to give time for the menu to enter the DOM
-                setTimeout(() => {
-                    document.getElementById(submenuLink.title.replace(' ', '') + '-entry-0').focus();
-                }, 5);
+            if (activatedFlag) {
+                this.activateMenu(mainMenuItem);
+                this.resetAllSubmenuLinksExcept(submenuLink);
+                submenuLink.expanded = true;
+                if (isKeyboardEvent) {
+                    // Barely delay to give time for the menu to enter the DOM
+                    setTimeout(() => {
+                        document.getElementById(submenuLink.title.replace(' ', '') + '-entry-0').focus();
+                    }, 5);
+                }
             }
         }
     }

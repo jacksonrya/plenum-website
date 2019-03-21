@@ -22,42 +22,53 @@
     </div>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+<script>
 import ArticlePreviewsTitleCard from '@/components/ArticlePreviewsTitleCard';
 
-@Component({
+/**
+ * A stack of previews of a provided list of articles that individually presents
+ * the articles' title, subtitle and abstract. Only articles that contain abstracts are potentially rendered.
+ */
+export default {
     components: {
         ArticlePreviewsTitleCard,
     },
-})
-
-// A stack of previews of a provided list of articles that individually presents
-// the articles' title, subtitle and abstract. Only articles that contain abstracts are potentially rendered.
-export default class ArticlePreviews extends Vue {
-    @Prop({ type: Array, default: () => []}) private articles!: Array<any>;
-    @Prop(Object) private parentCollection!: any;
-
-    constructor() { super(); }
-
-    // Computed: Returns whether or not any article's preview is visible
-    get isAnyArticlePreviewActive() {
-        return this.articles.some((article: any, index) => {
-            // Uncomment to reimplement abstract visibility upon keyboard navigational focus
-            //let articleId = this.parentCollection.title.replace(' ', '') + '-entry-' + index;
-            //return article.abstract && (article.previewVisible || document.activeElement === document.getElementById(articleId));
-            return article.abstract && article.previewVisible;
-        });
-    }
-
-    // Returns whether or not the article should be visible
-    // parameter(s) needed:
-    //      article = the article that might be visible
-    //      index   = the index of the same article in the table of contents
-    private isArticlePreviewVisible(article: any, index: number): boolean {
-        return article.previewVisible || (document.getElementById(
-            this.parentCollection.title.replace(' ', '') + '-entry-' + index) === document.activeElement
-        );
+    props: {
+        articles: {
+            type: Array,
+            default: []
+        },
+        parentCollection: {
+            type: Object,
+            default: function () {
+                return {}
+            }
+        }
+    },
+    methods: {
+        /**
+         * Returns whether or not the article should be visible
+         * @param {Object} article The article that might be visible.
+         * @param {number} index The index of the same article in the table of contents.
+         * @return {boolean}
+         */
+        isArticlePreviewVisible: function(article, index) {
+            return article.previewVisible || (document.getElementById(
+                this.parentCollection.title.replace(' ', '') + '-entry-' + index) === document.activeElement
+            );
+        }
+    },
+    computed: {
+        /**
+         */
+        isAnyArticlePreviewActive: function() {
+            return this.articles.some((article, index) => {
+                // Uncomment to reimplement abstract visibility upon keyboard navigational focus
+                //let articleId = this.parentCollection.title.replace(' ', '') + '-entry-' + index;
+                //return article.abstract && (article.previewVisible || document.activeElement === document.getElementById(articleId));
+                return article.abstract && article.previewVisible;
+            });
+        }
     }
 }
 </script>
