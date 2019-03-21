@@ -1,36 +1,28 @@
 <template>
-    <article
-        class="basic-page"
-    >
+    <article class="basic-page">
         <h1 class="basic-page__title">
             {{page.title}}
         </h1>
         <section
+            v-for="(section, index) in page.body"
+            :key="`basic-page-${index}`"
             class="basic-page__section"
-            v-for="section in page.body"
             v-html="section.processed"
         ></section>
         <hr class="basic-page__divider">
     </article>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
-
-@Component({
-    components: {
-
-    },
-})
-
-// Description of Vue component
-export default class BasicPage extends Vue {
-    @Prop() page!: any;
-
-    constructor() {
-        super();
+<script>
+export default {
+    props: {
+        page: {
+            type: Object,
+            default: function() {
+                return {}
+            }
+        }
     }
-
 }
 </script>
 

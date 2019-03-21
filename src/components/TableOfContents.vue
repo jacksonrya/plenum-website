@@ -63,99 +63,118 @@
         </ul>
 </template>
 
-<script lang="ts">
-import {Component, Emit, Prop, Vue} from 'vue-property-decorator';
+<script>
 import { mixin as focusMixin } from 'vue-focus';
-
-@Component({
+// TODO: remove parent collection and pass in individual attributes?
+/**
+ * Submenu associated with a unique main menu entry.
+ */
+export default {
     mixins: [focusMixin],
-    components: {},
-})
-
-// Submenu associated with a unique main menu entry
-export default class TableOfContents extends Vue {
-    // TODO: remove parent collection and pass in individual attributes?
-    @Prop(Object) private parentCollection!: any;
-    @Prop(Object) private mainMenuAncestor!: any;
-    private focusedIndex: number; //
-    private scrollPosition: number; //
-
-    // Construct the Table of Contents Vue component and initialize component data
-    constructor() {
-        super();
-        this.scrollPosition = 0;
-        this.focusedIndex = -1;
-    }
-
-    @Emit('articleSelected')
-    public articleSelected(routerLinkLocation: string, keyboardEvent?: boolean = true): void {
-        this.resetFocus();
-        this.resetVisibilities();
-    }
-
-    @Emit('exitMenu')
-    public exitMenu(parentMenu: any): void {
-        // Filler
-    }
-
-    // Turns the visibility of the requested article's preview abstract to 'off'
-    private resetVisibilities(): void {
-        this.parentCollection.articles.forEach(article => {
-            if (article.previewVisible === true)
-            article.previewVisible = false;
-        })
-    }
-
-    // Constructs a URL from the provided article in the form of:
-    // /article/{{node}}|{{uuid}}
-    private getUrl(article: any): string {
-        return "/content/" + article.type +  "/" + article.uuid;
-    }
-    // Radio toggles the visibility of the article preview amongst all articles of a collection
-    // except for the article menu item with the provided index
-    private handleHoverEvent(hoveredIndex: number): void {
-        this.parentCollection.articles = this.parentCollection.articles.map((article, i) => {
-            article.previewVisible = (i === hoveredIndex);
-            return article;
-        });
-    }
-
-    /*********************************/
-    /* KEYBOARD NAVIGATION FUNCTIONS */
-    /*********************************/
-
-    // Resets the focus so no menu item is in focus
-    // TODO: make this global for menu components?
-    private resetFocus(): void {
-        this.focusedIndex = -1;
-    }
-
-    // Searches through the menu items and moves focus to the next menu item label that starts with the queried letter
-    // parameter(s):
-    //      queryLetter           = single letter to be queried across menu item labels
-    //      currentlyFocusedIndex = index of the menu item that is currently focused
-    private focusByLetter(queryLetter: string, currentlyFocusedIndex: number): void {
-        // If not at the end of the menu...
-        const lengthOfMenu: number = this.parentCollection.articles.length;
-        if (currentlyFocusedIndex !== lengthOfMenu - 1) {
-            for (let index = currentlyFocusedIndex + 1; index < lengthOfMenu; index++) {
-                if (this.parentCollection.articles[index].title.toLowerCase().startsWith(queryLetter)) {
-                    document.getElementById(
-                        // fly-out-menu-item-1
-                        this.parentCollection.title.replace(' ', '') + '-entry-' + index).focus();
-                }
+    props: {
+        parentCollection: {
+            type: Object,
+            default: function() {
+                return {}
+            }
+        },
+        mainMenuAncestor: {
+            type: Object,
+            default: function() {
+                return {}
             }
         }
-    }
+    },
+    data: function() {
+        return {
+            focusedIndex: -1,
+            scrollPosition: 0
+        }
+    },
+    methods: {
+        /**
+         * @param {string} routerLinkLocation
+         * @param {boolean: true} keyboardEvent
+         */
+        articleSelected: function(routerLinkLocation, keyboardEvent = true) {
+            this.$emit('articleSelected')
+            this.resetFocus()
+            this.resetVisibilities()
+        },
+        /**
+         * @param {Object} parentMenu
+         */
+        exitMenu: function(parentMenu) {
+            this.$emit('exitMenu')
+        },
+        /**
+         * Turns the visibility of the requested article's preview abstract to 'off'.
+         */
+        resetVisibilities: function() {
+            this.parentCollection.articles.forEach(article => {
+                if (article.previewVisible === true) article.previewVisible = false
+            })
+        },
+        /**
+         * Constructs a URL from the provided article in the form of: /article/{{node}}|{{uuid}}
+         * @param {Object} article
+         * @return {string} URL path in the form of: '/article/{{node}}|{{uuid}}'.
+         */
+        getUrl: function(article) {
+            return "/content/" + article.type +  "/" + article.uuid
+        },
+        /**
+         * Radio toggles the visibility of the article preview amongst all articles of a collection
+         * except for the article menu item with the provided index.
+         * @param {number} hoveredIndex
+         */
+        handleHoverEvent: function(hoveredIndex) {
+            this.parentCollection.articles = this.parentCollection.articles.map((article, i) => {
+                article.previewVisible = (i === hoveredIndex);
+                return article;
+            })
+        },
+        /*********************************/
+        /* KEYBOARD NAVIGATION FUNCTIONS */
+        /*********************************/
 
-    // Move focus down one menu item, or return to first menu item if at the end
-    private moveFocusDownMenu(): void {
-        this.focusedIndex = this.focusedIndex === this.parentCollection.articles.length - 1 ? 0 : this.focusedIndex + 1;
-    }
-
-    // Move focus up one menu item, or return to last menu item if at the first
-    private moveFocusUpMenu(): void {
-        this.focusedIndex = this.focusedIndex === 0 ? this.parentCollection.articles.length - 1 : this.focusedIndex - 1;
+        // TODO: make this global for menu components?
+        /**
+         * Resets the focus so no menu item is in focus
+         */
+        resetFocus: function() {
+            this.focusedIndex = -1;
+        },
+        /**
+         * Searches through the menu items and moves focus to the next menu item label that starts with the queried letter.
+         * @param {string} queryLetter Single letter to be queried across menu item labels.
+         * @param {number} currentlyFocusedIndex Index of the menu item that is currently focused.
+         */
+        focusByLetter: function(queryLetter, currentlyFocusedIndex) {
+            // If not at the end of the menu...
+            const lengthOfMenu = this.parentCollection.articles.length;
+            if (currentlyFocusedIndex !== lengthOfMenu - 1) {
+                for (let index = currentlyFocusedIndex + 1; index < lengthOfMenu; index++) {
+                    if (this.parentCollection.articles[index].title.toLowerCase().startsWith(queryLetter)) {
+                        document.getElementById(
+                            // fly-out-menu-item-1
+                            this.parentCollection.title.replace(' ', '') + '-entry-' + index).focus();
+                    }
+                }
+            }
+        },
+        /**
+         * Move focus down one menu item, or return to first menu item if at the end.
+         */
+        moveFocusDownMenu: function() {
+            this.focusedIndex = this.focusedIndex === this.parentCollection.articles.length - 1 ? 0 : this.focusedIndex + 1;
+        },
+        /**
+         * Move focus up one menu item, or return to last menu item if at the first.
+         */
+        moveFocusUpMenu: function() {
+            this.focusedIndex = this.focusedIndex === 0 ? this.parentCollection.articles.length - 1 : this.focusedIndex - 1;
+        }
     }
 }
 </script>

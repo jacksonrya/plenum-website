@@ -2,51 +2,46 @@
     <main ref="home" class="content-container">
         <!-- TODO: use component associated with given content-type -->
         <basic-page
-            v-for="page in pages"
+            v-for="(page, index) in pages"
+            :key="`basic-page-${index}`"
             :page="page"
         ></basic-page>
     </main>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+<script>
 import BasicPage from '../components/content-types/BasicPage';
 
-@Component({
+export default {
     components: {
         BasicPage
     },
-})
-
-export default class About extends Vue {
-    private pages: Array<any>;
-
-    constructor() {
-        super();
-
-        this.pages = [];
-    }
-
-    // When view is mounted, retrieve article
-    private created() {
-        this.initAboutPage();
-    }
-
-    private initAboutPage(): void {
-        if (this.$store.getters['pages/getAboutPage'].length === 0) {
-            this.$store.dispatch('pages/initAboutPage')
-                .then(res => {
-                    this.pages = this.$store.getters['pages/getAboutPage'];
-                    this.$store.dispatch('setAppLoading', false);
-                });
-        } else {
-            this.pages = this.$store.getters['pages/getAboutPage'];
-            this.$store.dispatch('setAppLoading', false);
+    data: function() {
+        return {
+            pages: []
+        }
+    },
+    /**
+     * When view is mounted, retrieve article
+     */
+    created: function() {
+        this.initAboutPage()
+    },
+    methods: {
+        initAboutPage: function() {
+            if (this.$store.getters['pages/getAboutPage'].length === 0) {
+                this.$store.dispatch('pages/initAboutPage')
+                    .then(res => {
+                        this.pages = this.$store.getters['pages/getAboutPage'];
+                        this.$store.dispatch('setAppLoading', false);
+                    });
+            } else {
+                this.pages = this.$store.getters['pages/getAboutPage'];
+                this.$store.dispatch('setAppLoading', false);
+            }
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

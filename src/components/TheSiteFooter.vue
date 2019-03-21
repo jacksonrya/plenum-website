@@ -61,27 +61,10 @@
     </footer>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+<script>
+export default {
 
-@Component({
-    components: {
-
-    },
-})
-
-export default class TheSiteFooter extends Vue {
-
-    constructor() {
-        super();
-    }
-
-    // When view is mounted, retrieve article
-    private created() {
-    }
 }
-
-
 </script>
 
 <style lang="scss" scoped>

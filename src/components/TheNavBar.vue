@@ -15,13 +15,12 @@
     </div>
 </template>
 
-<script lang="ts">
-import {Component, Emit, Vue} from 'vue-property-decorator';
+<script>
 import TheMainMenu from '@/components/TheMainMenu';
 import { mapGetters } from 'vuex';
 import TheLogo from './TheLogo';
 
-@Component({
+export default {
     components: {
         TheLogo,
         TheMainMenu
@@ -33,22 +32,27 @@ import TheLogo from './TheLogo';
     },
     props: {
         mobileMenuOpen: Boolean
+    },
+    data: function() {
+        return {
+            navBarWidth: 240
+        }
+    },
+    methods: {
+        /**
+         * @param {string} routerLinkLocation
+         * @param {boolean} keyboardEvent
+         */
+        openContent(routerLinkLocation, keyboardEvent = true) {
+            this.$emit('openContent', routerLinkLocation, keyboardEvent)
+        },
+        /**
+         * 
+         */
+        revertMenuSession: function() {
+            this.$emit('revertMenuSession')
+        }
     }
-})
-
-// The main navigation bar for the app
-export default class TheNavBar extends Vue {
-    private navBarWidth: number = 240; // Width of the navigation bar
-
-    constructor() {
-        super();
-    }
-
-    @Emit('openContent')
-    private openContent(routerLinkLocation: string, keyboardEvent?: boolean = true) {}
-
-    @Emit('revertMenuSession')
-    private revertMenuSession(): void {}
 }
 </script>
 

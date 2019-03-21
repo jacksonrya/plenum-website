@@ -186,8 +186,6 @@ export default {
         @media screen and (max-width: $breakSmall) {
             transform: translateX(-100vw);
             transition: 300ms ease-in;
-
-            // left: -100vw;
             height: 100%;
             margin-top: 60px;
             width: 100vw;

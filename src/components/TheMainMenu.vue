@@ -111,14 +111,12 @@
     </ul>
 </template>
 
-<script lang="ts">
-import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
+<script>
 import MainMenuFlyOut from '@/components/MainMenuFlyOut';
 import { mixin as focusMixin } from 'vue-focus'; // ignore 'cannot resolve' error
 import { mapGetters } from 'vuex';
 
-
-@Component({
+export default {
     mixins: [focusMixin],
     components: {
         MainMenuFlyOut,
@@ -126,141 +124,149 @@ import { mapGetters } from 'vuex';
     computed: {
         ...mapGetters({
             "anyMenuIsOpen": 'menuTree/anyMenuIsOpen'
-        })
-    }
-})
-
-// Main navigation
-export default class TheMainMenu extends Vue {
-    @Prop(Array) private menuItems!: Array<any>; // Main Menu Items
-    private navHovered: boolean;
-
-    // Number of times a submenu link has been clicked, and therefore a new page was loaded
-    private focusedIndex: number; // Index of the focused menu item; Initialize to non-existent index value
-
-    constructor() {
-        super();
-        this.focusedIndex = -1;
-        this.navHovered = false;
-    }
-
-    // The procedure to open an article
-    // parameter(s) needed:
-    //      routerLinkLocation  = a url endpoint of the requested content
-    //      keyboardEvent?      = if the open content event was caused by a keyboard, defaults true
-    @Emit('openContent')
-    private openContent(routerLinkLocation: string, keyboardEvent?: boolean = true) {}
-
-    // Calls the router to go back in history to the page that was loaded before a menu session
-    @Emit('revertMenuSession')
-    private revertMenuSession(): void {}
-
-    // Returns whether or not all of the fly out submenus are closed
-    private get allFlyOutsAreClosed() {
-        return !this.menuItems.some((menuItem: any) => menuItem.expanded);
-    }
-
-    private handleNavHoverEvent() {
-        this.navHovered = true;
-        this.focusedIndex = -1;
-    }
-
-    private handleMenuItemHoverEvent(event, menu) {
-        if (event.type === 'mouseenter') {
-            menu.hovered = true;
-        } else if (event.type === 'mouseleave') {
-            menu.hovered = false;
-        } else {
-            console.error('incorrectly used function: handleMenuItemHoverEvent in TheMainMenu');
+        }),
+        /**
+         * Returns whether or not all of the fly out submenus are closed.
+         */
+        allFlyOutsAreClosed: function() {
+            return !this.menuItems.some((menuItem) => menuItem.expanded);
         }
-    }
-
-    // Sets the open menu and if the menu to open is already open, it closes
-    // parameter(s):
-    //      menuItem        = main menu item to be opened or closed
-    //      isKeyBoardEvent = whether or not the native DOM event was from a key press or not
-    //      toLastMenuItem  = whether or not focus goes to the last menu item; defaults to first menu item
-    private openMainMenuFlyOut(menuItem: any,
-                               isKeyboardEvent: boolean,
-                               toLastMenuItem?: boolean = false): void {
-        this.$store.dispatch('menuTree/openMainMenuItem', menuItem);
-        if (isKeyboardEvent) {
-            this.focusToFlyOut(menuItem, toLastMenuItem);
+    },
+    props: {
+        menuItems: {
+            type: Array,
+            default: []
         }
-    }
-
-    // Closes the flyout submenu for the provided main menu item and optionally moves focus to the parent menu item
-    // parameter(s):
-    //      menuItem         = parent menu item of the to-be closed flyout submenu
-    //      menuItemIndex    = index of the main menu item in the main menu list
-    //      wasKeyboardEvent = if the event that called this method was from a keyboard action
-    private closeMainMenuFlyOut(menuItem: any,
-                                menuItemIndex: number,
-                                returnFocusToMainMenuItem?: boolean = false) {
-        // Returns focus for keyboard navigation
-        if (returnFocusToMainMenuItem) {
-            setTimeout(() => {
-                this.focusedIndex = menuItemIndex;
-                // document.getElementById('main-menu-item-' + menuItemIndex).focus(); // FOCUS ON MAIN MENU ITEM
-                // TODO: change IDs from 'Publications-menu-item' to 'main-menu-item-1'
-            }, 10);
-        } else {
+    },
+    data: function() {
+        return {
+            navHovered: false,
+            focusedIndex: -1
+        }
+    },
+    methods: {
+        /**
+         * The procedure to open an article.
+         * @param {string} routerLinkLocation A url endpoint of the requested content.
+         * @param {boolean} keyboardEvent If the open content event was caused by a keyboard, defaults true.
+         */
+        openContent: function(routerLinkLocation, keyboardEvent = true) {
+            this.$emit('openContent')
+        },
+        /**
+         * Calls the router to go back in history to the page that was loaded before a menu session.
+         */
+        revertMenuSession: function() {
+            this.$emit('revertMenuSession')
+        },
+        /**
+         * 
+         */
+        handleNavHoverEvent: function() {
+            this.navHovered = true;
             this.focusedIndex = -1;
-        }
+        },
+        /**
+         * @param {Event} event
+         * @param {Object} menu
+         */
+        handleMenuItemHoverEvent: function(event, menu) {
+            if (event.type === 'mouseenter') {
+                menu.hovered = true;
+            } else if (event.type === 'mouseleave') {
+                menu.hovered = false;
+            } else {
+                console.error('incorrectly used function: handleMenuItemHoverEvent in TheMainMenu');
+            }
+        },
+        /**
+         * Sets the open menu and if the menu to open is already open, it closes.
+         * @param {Object}  menuItem Main menu item to be opened or closed.
+         * @param {boolean} isKeyboardEvent Whether or not the native DOM event was from a key press or not.
+         * @param {boolean} toLastMenuItem Whether or not focus goes to the last menu item; defaults to first menu item.
+         */
+        openMainMenuFlyOut: function(menuItem, isKeyboardEvent, toLastMenuItem = false) {
+            this.$store.dispatch('menuTree/openMainMenuItem', menuItem);
+            if (isKeyboardEvent) {
+                this.focusToFlyOut(menuItem, toLastMenuItem);
+            }
+        },
+        /**
+         * Closes the flyout submenu for the provided main menu item and optionally moves focus to the parent menu item.
+         * @param {Object} menuItem Parent menu item of the to-be closed flyout submenu.
+         * @param {number} menuItemIndex Index of the main menu item in the main menu list.
+         * @param {boolean} returnFocusToMainMenuItem If the event that called this method was from a keyboard action.
+         */
+        closeMainMenuFlyOut: function(menuItem, menuItemIndex, returnFocusToMainMenuItem = false) {
+            // Returns focus for keyboard navigation
+            if (returnFocusToMainMenuItem) {
+                setTimeout(() => {
+                    this.focusedIndex = menuItemIndex;
+                    // document.getElementById('main-menu-item-' + menuItemIndex).focus(); // FOCUS ON MAIN MENU ITEM
+                    // TODO: change IDs from 'Publications-menu-item' to 'main-menu-item-1'
+                }, 10);
+            } else {
+                this.focusedIndex = -1;
+            }
 
-        this.revertMenuSession();
-    }
+            this.revertMenuSession();
+        },
+        // TODO: rename to event handler and does this belong here?
+        /**
+         * Increments the number of pages visited during a menu session.
+         */
+        incrementPagesVisited: function() {
+            this.$store.dispatch('routerNav/pageVisited');
+        },
 
-    // TODO: rename to event handler and does this belong here?
-    // Increments the number of pages visited during a menu session
-    private incrementPagesVisited(): void {
-        this.$store.dispatch('routerNav/pageVisited');
-    }
+        /*********************************/
+        /* KEYBOARD NAVIGATION FUNCTIONS */
+        /*********************************/
+        // TODO: Find library to handle keyboard navigation, or globalize these functions for each menu
 
-    /*********************************/
-    /* KEYBOARD NAVIGATION FUNCTIONS */
-    /*********************************/
-    // TODO: Find library to handle keyboard navigation, or globalize these functions for each menu
-
-    // Move focus to the provided main menu item's flyout, default focuses on the first menu item of the flyout
-    // parameter(s) needed:
-    //      menu           = parent menu of the flyout to be focused on
-    //      toLastMenuItem = whether or not focus goes to the last menu item; defaults to first menu item
-    private focusToFlyOut(menu: any, toLastMenuItem?: boolean = false) {
-        const index: number = toLastMenuItem ? Object.keys(menu.submenu).length - 1 : 0;
-        setTimeout(() => {
-            document.getElementById(menu.title + '-fly-out-menu-item-' + index.toString()).focus();
-        }, 10);
-    }
-
-    // Setter for the data of the index of the focused menu item
-    // parameter(s) needed:
-    //      newVal = the new value from which to set
-    private setFocusedIndex(newVal: number): void {
-        this.focusedIndex = newVal;
-    }
-
-    // Move focus down one menu item, or return to first menu item if at the end
-    private moveDown() {
-        this.focusedIndex = this.focusedIndex === this.menuItems.length - 1 ? 0 : this.focusedIndex + 1;
-    }
-
-    // Move focus up one menu item, or return to last menu item if at the first
-    private moveUp() {
-        this.focusedIndex = this.focusedIndex === 0 ? this.menuItems.length - 1 : this.focusedIndex - 1;
-    }
-
-    // Searches through the menu items and moves focus to the next menu item label that starts with the queried letter
-    // parameter(s):
-    //      queryLetter           = single letter to be queried across menu item labels
-    //      currentlyFocusedIndex = index of the menu item that is currently focused
-    private focusByLetter(queryLetter: string, currentlyFocusedIndex: number) {
-        // If not at the end of the menu... This logic follows WAI-ARIA keyboard nav standards
-        if (currentlyFocusedIndex !== this.menuItems.length - 1) {
-            let el = 'main-menu-item-' + this.menuItems
-                .slice(currentlyFocusedIndex + 1)
-                .findIndex((menuItem: any) => menuItem.title.toLowerCase().startsWith(queryLetter));
-            document.getElementById(el).focus();
+        /**
+         * Move focus to the provided main menu item's flyout, default focuses on the first menu item of the flyout.
+         * @param {Object}  menu Parent menu of the flyout to be focused on.
+         * @param {boolean} toLastMenuItem Whether or not focus goes to the last menu item; defaults to first menu item.
+         */
+        focusToFlyOut: function(menu, toLastMenuItem = false) {
+            const index = toLastMenuItem ? Object.keys(menu.submenu).length - 1 : 0;
+            setTimeout(() => {
+                document.getElementById(menu.title + '-fly-out-menu-item-' + index.toString()).focus();
+            }, 10);
+        },
+        /**
+         * Setter for the data of the index of the focused menu item.
+         * @param {number} newVal the new value from which to set.
+         */
+        setFocusedIndex: function(newVal) {
+            this.focusedIndex = newVal;
+        },
+        /**
+         * Move focus down one menu item, or return to first menu item if at the end.
+         */
+        moveDown: function() {
+            this.focusedIndex = this.focusedIndex === this.menuItems.length - 1 ? 0 : this.focusedIndex + 1;
+        },
+        /**
+         * Move focus up one menu item, or return to last menu item if at the first.
+         */
+        moveUp: function() {
+            this.focusedIndex = this.focusedIndex === 0 ? this.menuItems.length - 1 : this.focusedIndex - 1;
+        },
+        /**
+         * Searches through the menu items and moves focus to the next menu item label that starts with the queried letter.
+         * @param {string} queryLetter Single letter to be queried across menu item labels.
+         * @param {number} currentlyFocusedIndex Index of the menu item that is currently focused.
+         */
+        focusByLetter: function(queryLetter, currentlyFocusedIndex) {
+            // If not at the end of the menu... This logic follows WAI-ARIA keyboard nav standards
+            if (currentlyFocusedIndex !== this.menuItems.length - 1) {
+                let el = 'main-menu-item-' + this.menuItems
+                    .slice(currentlyFocusedIndex + 1)
+                    .findIndex((menuItem) => menuItem.title.toLowerCase().startsWith(queryLetter));
+                document.getElementById(el).focus();
+            }
         }
     }
 }
