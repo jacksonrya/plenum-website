@@ -1,16 +1,16 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from '@/views/Home';
-import TextArticle from '@/views/TextArticle';
-import Publication from '@/views/Publication';
-import PageView from '@/views/PageView';
-import NotFoundView from '@/views/NotFoundView';
-import About from '@/views/About';
-import Contribute from '@/views/Contribute';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from '@/views/Home'
+import TextArticle from '@/views/TextArticle'
+import Publication from '@/views/Publication'
+import PageView from '@/views/PageView'
+import NotFoundView from '@/views/NotFoundView'
+import About from '@/views/About'
+import Contribute from '@/views/Contribute'
 
-import vueConfig from '../vue.config.js';
+import vueConfig from '../vue.config.js'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
     base: vueConfig.publicPath,
@@ -63,4 +63,4 @@ export default new Router({
             return { x: 0, y: 0 }
         }
     }
-});
+})

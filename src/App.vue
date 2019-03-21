@@ -189,12 +189,14 @@ export default {
             height: 100%;
             margin-top: 60px;
             width: 100vw;
+
+            opacity: 0;
         }
     }
 
     .lefter__mobile--menu-open {
         transform: translateX(0vw);
-        // left: 0;
+        opacity: 1;
         transition: 300ms ease-out;
     }
 

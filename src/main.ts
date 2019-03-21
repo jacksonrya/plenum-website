@@ -1,27 +1,27 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from '@/store/index';
-import checkView from 'vue-check-view';
-import headroom from 'vue-headroom';
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from '@/store/index'
+import checkView from 'vue-check-view'
+import headroom from 'vue-headroom'
 
-import VueMq from 'vue-mq';
+import VueMq from 'vue-mq'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
 // Add keycode specific events to app for accessibility navigation
-const alphabetCodes: number[] = [];
+const alphabetCodes: number[] = []
 for (let i = 48; i <= 90; i++) {
-    alphabetCodes.push(i);
+    alphabetCodes.push(i)
 }
 Vue.config.keyCodes = {
     home: 36,
     end: 35,
     alphabet: alphabetCodes,
-};
+}
 
-Vue.use(checkView);
-Vue.use(headroom);
+Vue.use(checkView)
+Vue.use(headroom)
 Vue.use(VueMq, {
     breakpoints: { // default breakpoints - customize this
       sm: 450,
@@ -35,27 +35,27 @@ Vue.use(VueMq, {
 router.beforeEach((to, from, next) => {
     if (!store.getters['getAppReady']) {
         store.dispatch('initApp').then(response => {
-            next();
-        });
+            next()
+        })
     } else {
-        next();
+        next()
     }
-});
+})
 
 // Change the app's title based on route
 router.afterEach((to, from) => {
-    const name = to.name;
+    const name = to.name
     if (name.includes('article')) {
         // Defer to TextArticle view
     } else if (name.includes('publication')) {
-        window.document.title = process.env.VUE_APP_TITLE.toUpperCase() + " JOURNAL";
+        window.document.title = process.env.VUE_APP_TITLE.toUpperCase() + " JOURNAL"
     } else {
-        window.document.title = process.env.VUE_APP_TITLE.toUpperCase() + " | " + name.toUpperCase();
+        window.document.title = process.env.VUE_APP_TITLE.toUpperCase() + " | " + name.toUpperCase()
     }
-});
+})
 
 new Vue({
     router,
     store,
     render: (h) => h(App),
-}).$mount('#app');
+}).$mount('#app')
