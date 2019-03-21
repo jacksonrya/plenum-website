@@ -63,7 +63,7 @@ export default {
         // @media screen and (max-width: $breakSmall) {
         //     display: none;
         // }
-        margin-top: $headingCardHeight;
+        margin-top: calc(#{$headingCardHeight} - 100px); // 100px = top-margin on parent
 
         @media screen and (max-width: $breakSmall) {
             position: relative;
