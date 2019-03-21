@@ -20,26 +20,17 @@
     </main>
 </template>
 
-<script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
-
-    @Component({
-        components: {},
-    })
-
-// Description of Vue component
-    export default class NotFoundView extends Vue {
-
-        constructor() {
-            super();
-        }
-
-        // Navigate back one page in URL history
-        private goBack() {
+<script>
+export default {
+    methods: {
+        /**
+         * Navigate back one page in URL history.
+         */
+        goBack: function() {
             this.$router.go(-1);
         }
-
     }
+}
 </script>
 
 <style lang="scss" scoped>

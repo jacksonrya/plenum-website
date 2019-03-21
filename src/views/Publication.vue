@@ -4,37 +4,28 @@
     </div>
 </template>
 
-<script lang="ts">
-import {Component, Vue, Watch} from 'vue-property-decorator';
-import { Route } from 'vue-router';
+<script>
+import { Route } from 'vue-router'
 
-@Component({
-    components: {
-
-    }
-})
-
-export default class Publication extends Vue {
-    private $route: Route;
-
-    constructor() {
-        super();
-    }
-
-    private created() {
-        this.openTableOfContents();
-    }
-
-    // TODO: globalize URL decoding/ encoding
-    private openTableOfContents() {
-        const pubParam: string = this.$route.params.publication;
-        const pubTitle = pubParam
-            .replace(/-/g, ' ') // Replace dashes with spaces
-            .replace(/(^|\s)\S/g, letter => letter.toUpperCase()); // Capitalize all words
-        const openPub = this.$store.getters['menuTree/openPublication'];
-        if (openPub.title !== pubTitle) {
-            if (this.$store.getters['menuTree/menuTree'].length !== 0) {
-                this.$store.dispatch('menuTree/activateSubmenuPreviewByTitle', pubTitle);
+export default {
+    created: function() {
+        this.openTableOfContents()
+    },
+    methods: {
+        // TODO: globalize URL decoding/ encoding
+        /**
+         * 
+         */
+        openTableOfContents: function() {
+            const pubParam = this.$route.params.publication;
+            const pubTitle = pubParam
+                .replace(/-/g, ' ') // Replace dashes with spaces
+                .replace(/(^|\s)\S/g, letter => letter.toUpperCase()); // Capitalize all words
+            const openPub = this.$store.getters['menuTree/openPublication'];
+            if (openPub.title !== pubTitle) {
+                if (this.$store.getters['menuTree/menuTree'].length !== 0) {
+                    this.$store.dispatch('menuTree/activateSubmenuPreviewByTitle', pubTitle);
+                }
             }
         }
     }

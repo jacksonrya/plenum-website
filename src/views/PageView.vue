@@ -8,80 +8,77 @@
     </main>
 </template>
 
-<script lang="ts">
-import {Component, Vue, Watch} from "vue-property-decorator";
+<script>
 import BasicPage from '../components/content-types/BasicPage';
 
-@Component({
+export default {
     components: {
         BasicPage
     },
-})
+    data: {
+        page: {}
+    },
+    /**
+     * When view is mounted, retrieve article.
+     */
+    mounted: function() {
+        this.getPage()
 
-export default class PageView extends Vue {
-    private page: any;
+        vm.$watch('$route.path', function(newVal, oldVal) {
+            this.page = undefined;
+            this.getPage();
+        })
+    },
+    methods: {
+        /**
+         * 
+         */
+        getPage() {
+            let menuPage = this.getPageMetaDataFromMenuTree(this.$route.path);
 
-    constructor() {
-        super();
+            let pages = this.$store.getters['pages/getPages'];
 
-        this.page = {};
-    }
+            if (menuPage.uuid && !pages.some(page => page.uuid === menuPage.uuid)) {
+                this.$store.dispatch('pages/fetchPage', menuPage.uuid)
+                    .then(res => {
+                        pages = this.$store.getters['pages/getPages'];
+                        this.page = pages.find(page => page.uuid === menuPage.uuid);
+                    });
+            } else {
+                this.page = pages.find(page => page.uuid === menuPage.uuid);
+            }
+        },
+        /**
+         * Returns simplified data via the menu tree of the page represented in the provided path.
+         * @param {string} path Url path to a page e.g. '/section/page'.
+         * @return
+         */
+        getPageMetaDataFromMenuTree(path) {
+            const menuTree = this.$store.getters['menuTree/menuTree'];
 
-    // When view is mounted, retrieve article
-    private mounted() {
-        this.getPage();
-    }
+            let pathParts;
+            let section;
+            let pageTitle;
+            let menuPage;
 
-    @Watch('$route.path')
-    private onRouteChanged(newVal, oldVal) {
-        this.page = undefined;
-        this.getPage();
-    }
+            let slashCount = (path.match(/\//g) || []).length;
+            if (slashCount === 2) {
+                pathParts = path.slice(1).split('/');
+                section = pathParts[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                pageTitle = pathParts[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
-    private getPage(): void {
-        let menuPage = this.getPageMetaDataFromMenuTree(this.$route.path);
+                menuPage = menuTree
+                    .find(mainMenuItem => mainMenuItem.title.toLowerCase() === section.toLowerCase())
+                    .submenu.find(page => page.title.toLowerCase() === pageTitle.toLowerCase());
+            } else if (slashCount === 1) {
+                pageTitle = path.slice(1).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
-        let pages = this.$store.getters['pages/getPages'];
+                menuPage = menuTree
+                    .find(mainMenuItem => mainMenuItem.title.toLowerCase() === pageTitle.toLowerCase())
+            }
 
-        if (menuPage.uuid && !pages.some(page => page.uuid === menuPage.uuid)) {
-            this.$store.dispatch('pages/fetchPage', menuPage.uuid)
-                .then(res => {
-                    pages = this.$store.getters['pages/getPages'];
-                    this.page = pages.find(page => page.uuid === menuPage.uuid);
-                });
-        } else {
-            this.page = pages.find(page => page.uuid === menuPage.uuid);
+            return menuPage;
         }
-    }
-
-    // Returns simplified data via the menu tree of the page represented in the provided path
-    // parameter(s) needed:
-    //      path = url path to a page e.g. '/section/page'
-    private getPageMetaDataFromMenuTree(path: string) {
-        const menuTree = this.$store.getters['menuTree/menuTree'];
-
-        let pathParts;
-        let section;
-        let pageTitle;
-        let menuPage;
-
-        let slashCount = (path.match(/\//g) || []).length;
-        if (slashCount === 2) {
-            pathParts = path.slice(1).split('/');
-            section = pathParts[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            pageTitle = pathParts[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-
-            menuPage = menuTree
-                .find(mainMenuItem => mainMenuItem.title.toLowerCase() === section.toLowerCase())
-                .submenu.find(page => page.title.toLowerCase() === pageTitle.toLowerCase());
-        } else if (slashCount === 1) {
-            pageTitle = path.slice(1).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-
-            menuPage = menuTree
-                .find(mainMenuItem => mainMenuItem.title.toLowerCase() === pageTitle.toLowerCase())
-        }
-
-        return menuPage;
     }
 }
 </script>

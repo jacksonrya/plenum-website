@@ -129,7 +129,7 @@ export default {
          * Returns whether or not all of the fly out submenus are closed.
          */
         allFlyOutsAreClosed: function() {
-            return !this.menuItems.some((menuItem: any) => menuItem.expanded);
+            return !this.menuItems.some((menuItem) => menuItem.expanded);
         }
     },
     props: {

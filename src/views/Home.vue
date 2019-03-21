@@ -2,46 +2,41 @@
     <main ref="home" class="content-container">
         <!-- TODO: use component associated with given content-type -->
         <basic-page
-            v-for="page in pages"
+            v-for="(page, index) in pages"
+            :key="`basic-page-${index}`"
             :page="page"
         ></basic-page>
     </main>
 </template>
 
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+<script>
 import BasicPage from '../components/content-types/BasicPage';
 
-@Component({
+export default {
     components: {
         BasicPage
     },
-})
-
-export default class Home extends Vue {
-    private pages: Array<any>;
-
-    constructor() {
-        super();
-
-        this.pages = [];
-    }
-
-    // When view is mounted, retrieve article
-    private created() {
+    data: {
+        pages: []
+    },
+    /**
+     * When view is mounted, retrieve article
+     */
+    created: function() {
         this.initFrontPage();
-    }
-
-    private initFrontPage(): void {
-        if (this.$store.getters['pages/getFrontPage'].length === 0) {
-            this.$store.dispatch('pages/initFrontPage')
-                .then(res => {
-                    this.pages = this.$store.getters['pages/getFrontPage'];
-                    this.$store.dispatch('setAppLoading', false);
-                });
-        } else {
-            this.pages = this.$store.getters['pages/getFrontPage'];
-            this.$store.dispatch('setAppLoading', false);
+    },
+    methods: {
+        initFrontPage: function() {
+            if (this.$store.getters['pages/getFrontPage'].length === 0) {
+                this.$store.dispatch('pages/initFrontPage')
+                    .then(res => {
+                        this.pages = this.$store.getters['pages/getFrontPage'];
+                        this.$store.dispatch('setAppLoading', false);
+                    });
+            } else {
+                this.pages = this.$store.getters['pages/getFrontPage'];
+                this.$store.dispatch('setAppLoading', false);
+            }
         }
     }
 }
