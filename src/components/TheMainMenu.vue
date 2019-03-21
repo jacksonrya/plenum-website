@@ -138,9 +138,11 @@ export default {
             default: []
         }
     },
-    data: {
-        navHovered: false,
-        focusedIndex: -1
+    data: function() {
+        return {
+            navHovered: false,
+            focusedIndex: -1
+        }
     },
     methods: {
         /**

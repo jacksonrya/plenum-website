@@ -85,9 +85,11 @@ export default {
             }
         }
     },
-    data: {
-        focusedIndex: -1,
-        scrollPosition: 0
+    data: function() {
+        return {
+            focusedIndex: -1,
+            scrollPosition: 0
+        }
     },
     methods: {
         /**

@@ -33,8 +33,10 @@ export default {
     props: {
         mobileMenuOpen: Boolean
     },
-    data: {
-        navBarWidth: 240
+    data: function() {
+        return {
+            navBarWidth: 240
+        }
     },
     methods: {
         /**

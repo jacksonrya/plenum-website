@@ -127,23 +127,25 @@ export default {
         TextArticleNavigation,
         TextArticleTitleCard,
     },
-    data: {
-        articleLoading: false,
-        article: {
-            title: '',
-            subtitle: '',
-            author: ''
-        },
-        articleError: false,
+    data: function() {
+        return {
+            articleLoading: false,
+            article: {
+                title: '',
+                subtitle: '',
+                author: ''
+            },
+            articleError: false,
 
-        isAtPageTop: true,
-        isBiblioInView: false,
+            isAtPageTop: true,
+            isBiblioInView: false,
 
-        lastPercentCenter: -1,
-        maxPercentCenter: this.lastPercentCenter,
+            lastPercentCenter: -1,
+            maxPercentCenter: -1,
 
-        hideHeadroom: true,
-        scrollSessionFromTop: true
+            hideHeadroom: true,
+            scrollSessionFromTop: true
+        }
     },
     /** 
      * When view is mounted, retrieve article

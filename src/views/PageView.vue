@@ -15,8 +15,10 @@ export default {
     components: {
         BasicPage
     },
-    data: {
-        page: {}
+    data: function() {
+        return {
+            page: {}
+        }
     },
     /**
      * When view is mounted, retrieve article.
