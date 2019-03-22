@@ -1,44 +1,46 @@
 <template>
-    <div class="info-card">
+    <div>
         <div class="info-card__floating-paper">
             <div class="info-card__header">
-                <h1 class="info-card__title">
-                    {{info.author}}
-                    <span v-if="info.subtitle" class="info-card__subtitle">
-                        &nbsp;({{info.subtitle}})
-                    </span>
-                </h1>
                 <p class="info__call-number">
                     G {{year}}
                 </p>
+                <address class="info__authors">
+                    <span
+                        v-for="(author, index) in authorList"
+                        :key="`author-${index}`"
+                        class="info__author"
+                    >
+                        {{author}}<br>
+                    </span>
+                </address>
             </div>
-            <address class="info__authors">
-                <span
-                    v-for="(author, index) in authorList"
-                    :key="`author-${index}`"
-                    class="info__author"
-                >
-                    {{author}}
-                </span>
-            </address>
+            <div class="info-card__title">
+                <h1>
+                    {{title}}
+                    <span v-if="subtitle" class="info-card__subtitle">
+                        {{subtitle}}
+                    </span>
+                </h1>
+            </div>
             <ul class="info-card__tags">
                 <li
-                    v-for="(subject, index) in subjectTags"
+                    v-for="(keyword, index) in keywordList"
                     :key="`tag-${index}`"
                     class="info-card__tag"
                 >
-                    {{subject}}
+                    {{keyword}}
                 </li>
             </ul>
             <div class="info-card__footer">
                 <p class="info-card__date-code">
-                    G&nbsp;&nbsp;{{year}}&nbsp;&nbsp;&nbsp;{{date.getDate.padStart(2, 0)}}&ndash;{{date.getMonth().padStart(2, 0)}}
+                    G&nbsp;&nbsp;{{year}}&nbsp;&nbsp;&nbsp;{{String(dateFormatted.getDate()).padStart(2, 0)}}&ndash;{{String(dateFormatted.getMonth()).padStart(2, 0)}}
                 </p>
-                <a class="info-card__publication" :href="info.publication.pageUrl">
-                    {{info.publication.name}}
+                <a class="info-card__publication" :href="publication.pageUrl">
+                    {{publication.name}}
                 </a>
                 <p class="info-card__copyright">
-                    &copy;&nbsp;{{}}
+                    &copy;&nbsp;{{authorsShortFormat}}
                 </p>
             </div>
         </div>
@@ -46,22 +48,47 @@
             ABSTRACT
         </h2>
         <p class="info-card__abstract-body">
-            {{info.abstract}}
+            {{abstract}}
         </p>
     </div>
 </template>
 
 <script>
-import InfoCard from '@/lib/dummy_data/infoCard'
+import InfoCardData from '@/lib/dummy_data/data_infoCard.js'
 
 export default {
-    components: {
-        
+    props: {
+        id: String,
+        authors: {
+            type:String,
+            default: ""
+        },
+        title: String,
+        subtitle: {
+            type: String,
+            default: ""
+        },
+        date: String,
+        abstract: String,
+        keywords: {
+            type: Array,
+            default: function() {
+                return []
+            }
+        },
+        publication: {
+            type: Object,
+            default: function() {
+                return {
+                    name: "",
+                    pageUrl: ""
+                }
+            }
+        }
     },
     data: function() {
         return {
-            info = InfoCard,
-            date = new Date(info.date)
+            dateFormatted: new Date(InfoCardData.date)
         }
     },
     methods: {
@@ -69,10 +96,10 @@ export default {
     },
     computed: {
         year: function() {
-            return this.date.getFullYear()
+            return this.dateFormatted.getFullYear()
         },
         authorList: function() {
-            return this.info.authors.split(";")
+            return this.authors.split(";")
         },
         authorsShortFormat: function() {
             let formattedFirstAuthor = this.authorList[0].split(', ').reverse().join(' ')
@@ -82,16 +109,41 @@ export default {
                 return formattedFirstAuthor
             }
         },
-        subjectTags: function() {
-            return this.subjectTags.map(tag => tag.replace(/ /g, "&mdash;"))
+        keywordList: function() {
+            return this.keywords.map(tag => tag.replace(/ /g, "--"))
         }
     }
 }
 </script>
 
 <style lang="scss">
-    @import 'styles/_settings';
-    @import 'styles/focusable';
+    @import '../styles/_settings';
+    @import '../styles/focusable';
 
-    
+    .info-card__floating-paper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-card__header {
+        display: flex;
+        justify-content: space-between;
+        order: 1;
+    }
+
+    .info-card__title {
+        order: 2;
+    }
+
+    .info-card__tags {
+        @media screen and (max-width: $breakSmall) {
+            order: 3;
+        }
+    }
+
+    .info-card__footer {
+        @media screen and (max-width: $breakSmall) {
+            order: 4;
+        }
+    }
 </style>

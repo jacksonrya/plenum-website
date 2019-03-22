@@ -2,6 +2,7 @@
     <div
         id="app"
         @keydown.tab="revertMenuSession"
+        :style="{'background': backgroundColor}"
     >
         <div
             v-show="$route.path.includes('publications')"
@@ -22,12 +23,14 @@
 
         <the-site-header
             headerTitle=""
-            :backgroundColor="styles.backgroundColors.default"
-            :mobileMenuOpen="mobileMenuOpen"
+            :backgroundColor="backgroundColor"
+            :buttonSetToClose="buttonSetToClose"
             @openMenu="handleOpenMenu"
-            @closeMenu="handleCloseMenu"
+            @close="handleClose"
             @logoLinkActivated="handleLogoLinkActivation"
         ></the-site-header>
+
+        <info-card v-show="infoCardOpen" v-bind="infoCardData" class="info-card"></info-card>
 
         <transition
             name="component-fade"
@@ -42,7 +45,7 @@
             </router-view>
         </transition>
 
-        <the-site-footer class="site-footer"></the-site-footer>
+        <the-site-footer class="site-footer" :style="{'background': backgroundColor, 'box-shadow': `0 50px 30px 72px ${backgroundColor}`}"></the-site-footer>
     </div>
 </template>
 
@@ -52,6 +55,9 @@ import Home from '@/views/Home';
 import TheSiteFooter from './components/TheSiteFooter';
 import TheSiteHeader from './components/TheSiteHeader';
 
+import InfoCardData from '@/lib/dummy_data/data_infoCard.js'
+import InfoCard from '@/components/InfoCard'
+
 import styles from '@/lib/styles.js';
 
 export default {
@@ -59,12 +65,23 @@ export default {
         TheSiteHeader,
         TheSiteFooter,
         TheNavBar,
-        Home
+        Home,
+        InfoCard
     },
     data: function() {
         return {
             mobileMenuOpen: false,
-            styles: styles
+            infoCardOpen: true,
+            styles: styles,
+            infoCardData: InfoCardData
+        }
+    },
+    computed: {
+        buttonSetToClose: function() {
+            return this.mobileMenuOpen || this.infoCardOpen;
+        },
+        backgroundColor: function() {
+            return this.infoCardOpen && this.$mq === 'sm' ? styles.backgroundColors.card : styles.backgroundColors.default
         }
     },
     methods: {
@@ -74,8 +91,9 @@ export default {
         },
 
         /** */
-        handleCloseMenu: function() {
-            this.mobileMenuOpen = false;
+        handleClose: function() {
+            if (this.mobileMenuOpen) this.mobileMenuOpen = false
+            if (this.infoCardOpen) this.infoCardOpen = false
         },
 
         /** */
@@ -198,21 +216,33 @@ export default {
         transition: 300ms ease-out;
     }
 
+    .info-card {
+        background: rgb(247, 247, 233);
+        @media screen and (max-width: $breakSmall) {
+            position: fixed;
+            top: 80px;
+            padding: 10px;
+
+        }
+
+    }
+
     .content-section {
         top: 0;
         left: 0;
         width: calc(#{$appWidth} - #{$lefterWidth} * 1.5);
         padding: 120px 0 0 calc(#{$lefterWidth} * 1.5);
-        // padding: 0 0 0 calc(#{$lefterWidth} * 1.5);
 
         overflow-x: hidden;
 
         @media screen and (max-width: $breakSmall) {
-            padding: 72px 0 0 0;
-            width: 100%;
+            margin: 72px 10px 10px 10px;
+            width: calc(100vw - 20px);
+            padding: 0;
         }
         @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
-            padding: 100px 0 0 calc(#{$lefterWidth} * 1.5);
+            margin: 100px 10px 10px 10px;
+            padding: 0px 0 0 calc(#{$lefterWidth} * 1.5);
         }
     }
 

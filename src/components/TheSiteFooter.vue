@@ -63,7 +63,9 @@
 
 <script>
 export default {
-
+    props: {
+        backgroundColor: String
+    }
 }
 </script>
 

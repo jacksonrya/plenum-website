@@ -45,9 +45,9 @@
             <the-menu-button 
                 v-show="$mq == 'sm'"
                 class="site-header__menu-button"
-                :closed="!mobileMenuOpen"
-                @menuClick="handleOpenMenu"
-                @closeClick="handleCloseMenu"
+                :closed="!buttonSetToClose"
+                @menuClick="handleOpenButton"
+                @closeClick="handleCloseButton"
             ></the-menu-button>
         </header>
     </vue-headroom>
@@ -69,14 +69,14 @@ export default {
             type: String,
             default: ''
         },
-        mobileMenuOpen: Boolean
+        buttonSetToClose: Boolean
     },
     methods: {
-        handleOpenMenu: function() {
+        handleOpenButton: function() {
             this.$emit('openMenu')
         },
-        handleCloseMenu: function() {
-            this.$emit('closeMenu')
+        handleCloseButton: function() {
+            this.$emit('close')
         },
         // Emits logo click event to parent
         logoLinkActivated: function() {

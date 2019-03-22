@@ -22,7 +22,8 @@ $buttonTextCenterAdjustment: 3px;
 $flyoutFontSize: 1.75em;
 
 // Color
-$bgColor: rgb(250, 247, 247);
+// TODO: make a global state of app color from which to assign color sensitive components
+$bgColor: rgb(250, 245, 245);
 
 header {
     width: 100%;
