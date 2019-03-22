@@ -219,12 +219,11 @@ export default {
     .info-card {
         background: rgb(247, 247, 233);
         @media screen and (max-width: $breakSmall) {
-            position: fixed;
+            position: absolute;
             top: 80px;
-            padding: 10px;
-
+            padding: 12px;
+            margin-bottom: 50px;
         }
-
     }
 
     .content-section {
