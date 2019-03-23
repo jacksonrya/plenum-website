@@ -111,12 +111,12 @@ export default {
 @import "../styles/focusable";
 
 .info-card {
-  font-family: "PT Serif Caption";
-  transition: 200ms ease-in;
+  font-family: $font-stack-pt-serif-caption;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     font-size: 2.5em;
     line-height: 0.9em;
+    transition: $transition-overlay-duration ease-in;
   }
 }
 
@@ -125,8 +125,7 @@ export default {
 }
 
 .info-card a {
-  //   text-decoration: underline;
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid black;
 }
 
 .info-card__floating-paper {
@@ -149,12 +148,12 @@ export default {
 
 .info__authors {
   text-align: right;
-  font-family: "PT Serif";
+  font-family: $font-stack-pt-serif;
 }
 
 .info-card__title {
   order: 2;
-  font-family: "PT Serif";
+  font-family: $font-stack-pt-serif;
   font-weight: bold;
   text-align: left;
   margin: 1.2em 0 0 0;
@@ -162,7 +161,7 @@ export default {
 }
 
 .info-card__subtitle {
-  font-family: "PT Serif Caption";
+  font-family: $font-stack-pt-serif-caption;
   font-weight: normal;
   font-style: italic;
 }
@@ -172,7 +171,7 @@ export default {
   font-size: 0.75em;
   margin: 2em 0 0 0;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     order: 6;
   }
 }
@@ -194,7 +193,7 @@ export default {
   margin: 1em 0 0 0;
   text-transform: capitalize;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     order: 3;
   }
 }
@@ -202,20 +201,20 @@ export default {
 .info-card__footer {
   order: 5;
   margin: 1.5em 0 0 0;
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     order: 4;
   }
 }
 
 .info-card__date-code {
   text-align: left;
-  font-family: "PT Serif";
+  font-family: $font-stack-pt-serif;
   font-weight: bold;
 }
 
 .info-card__publication {
   text-align: right;
-  font-family: "PT Serif";
+  font-family: $font-stack-pt-serif;
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -231,10 +230,9 @@ export default {
   height: 100px;
   position: relative;
   top: 0;
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     width: 100vw;
     order: 5;
-    // border: 3px solid black;
     box-shadow: 0px 5px 17px 2px black;
   }
 }

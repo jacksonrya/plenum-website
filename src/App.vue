@@ -159,18 +159,18 @@ export default {
   margin-block-end: 0;
   font-size: 12px;
   text-decoration: none;
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     font-size: 0.9em;
   }
 }
 
 body {
-  background: $bgColor;
+  background: $color-default;
 }
 
 #app {
   position: absolute;
-  width: $appWidth; // 100vw adds a scroll bar to the bottom of page
+  width: $app-width-desktop; // 100vw adds a scroll bar to the bottom of page
   height: 100vh;
 
   color: #2c3e50;
@@ -178,12 +178,12 @@ body {
   background: transparent;
 
   text-align: center;
-  font-family: $sansSerifFont;
+  font-family: $font-stack-avenir;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 
-  @media screen and (max-width: $breakSmall) {
-    width: 100vw;
+  @include bp-small {
+    width: $app-width-mobile;
   }
 }
 
@@ -196,30 +196,30 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: $lefterWidth;
+  width: $lefter-width-desktop;
   z-index: 10;
   margin-top: 100px;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     transform: translateX(-100vw);
-    transition: 300ms ease-in;
+    @include transition($transition-overlay-duration ease-in);
     height: 100%;
     margin-top: 60px;
-    width: 100vw;
+    width: $lefter-width-mobile;
   }
 }
 
 .lefter__mobile--menu-open {
   transform: translateX(0vw);
   // left: 0;
-  transition: 300ms ease-out;
+  @include transition($transition-overlay-duration ease-out);
 }
 
 .info-card {
   top: 80px;
   background: rgb(247, 247, 233);
-  transition: 200ms ease-in;
-  @media screen and (max-width: $breakSmall) {
+  @include transition($transition-overlay-duration ease-in);
+  @include bp-small {
     position: absolute;
     left: 0;
     padding: 12px;
@@ -229,9 +229,9 @@ body {
 
 .info-card--closed {
   transform: translateX(100vw);
-  transition: 200ms ease-in;
+  @include transition($transition-overlay-duration ease-in);
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     // transform: translateX(0vw);
   }
 }
@@ -239,19 +239,19 @@ body {
 .content-section {
   top: 0;
   left: 0;
-  width: calc(#{$appWidth} - #{$lefterWidth} * 1.5);
-  padding: 120px 0 0 calc(#{$lefterWidth} * 1.5);
+  width: calc(#{$app-width-desktop} - #{$lefter-width-desktop} * 1.5);
+  padding: 120px 0 0 calc(#{$lefter-width-desktop} * 1.5);
 
   overflow-x: hidden;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-medium {
+    margin: 100px 10px 10px 10px;
+    padding: 0px 0 0 calc(#{$lefter-width-desktop} * 1.5);
+  }
+  @include bp-small {
     margin: 72px 10px 10px 10px;
     width: calc(100vw - 20px);
     padding: 0;
-  }
-  @media screen and (min-width: $breakSmall) and (max-width: $breakMedium) {
-    margin: 100px 10px 10px 10px;
-    padding: 0px 0 0 calc(#{$lefterWidth} * 1.5);
   }
 }
 
@@ -259,18 +259,19 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: $footerHeight;
-  background: #faf7f7;
-  box-shadow: 0 50px 30px 72px #faf7f7;
+  height: $footer-height-desktop;
+  background: $color-default;
+  box-shadow: 0 50px 30px 72px $color-default;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
+    height: $footer-height-mobile;
     font-size: 1.5em;
   }
 }
 
 .component-fade-enter-active,
 .component-fade-leave-active {
-  transition: opacity 0.3s ease;
+  @include transition(opacity 0.3s ease);
 }
 .component-fade-enter,
 .component-fade-leave-to {

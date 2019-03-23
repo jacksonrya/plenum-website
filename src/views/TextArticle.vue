@@ -299,8 +299,8 @@ export default {
     .header {
         position: relative;
         top: 0;
-        left: $navBarWidth;
-        height: $navBarWidth;
+        left: $navigation-width;
+        height: $navigation-width;
         margin-left: 30px;
 
         z-index: 2;
@@ -312,7 +312,7 @@ export default {
     .header--embedded {
         position: relative;
         left: 0;
-        height: $navBarWidth;
+        height: $navigation-width;
         z-index: 1;
         outline: 3px solid transparent;
     }
@@ -322,11 +322,11 @@ export default {
     }
 
     .article-headroom {
-        height: calc(#{$navBarWidth} + 60px);
+        height: calc(#{$navigation-width} + 60px);
     }
 
     .header--headroom {
-        left: calc(#{$lefterWidth} * 1.5) !important;
+        left: calc(#{$lefter-width-desktop} * 1.5) !important;
     }
 
     .header-container {
@@ -374,8 +374,8 @@ export default {
         position: fixed;
         left: 0;
         bottom: 0;
-        width: $navBarWidth * 1.5;
-        height: $footerHeight;
+        width: $navigation-width * 1.5;
+        height: $footer-height-desktop;
         z-index: 4;
     }
 

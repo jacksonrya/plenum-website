@@ -254,9 +254,9 @@ export default class MainMenuFlyOutSections extends Vue {
 <style lang="scss" scoped>
     @import '../styles/_settings';
 
-    $preview-width: calc(100vw - (#{$navBarWidth} * 2) - 3px);
+    $preview-width: calc(100vw - (#{$navigation-width} * 2) - 3px);
     $preview-height: 90vh;
-    $menuItemFontSize: calc(#{$flyoutFontSize} - 0.25em);
+    $menuItemFontSize: calc(#{$flyout-font-size} - 0.25em);
 
     .collection-group-menu {
         //padding-top: 0.25em;
@@ -264,11 +264,11 @@ export default class MainMenuFlyOutSections extends Vue {
 
     .collection-group-menu__menu-item {
         font-size: 1.75em;
-        height: $flyoutFontSize;
+        height: $flyout-font-size;
     }
 
     .collection-group-menu__menu-item a {
-        height: $flyoutFontSize;
+        height: $flyout-font-size;
         text-decoration: none;
         outline: none;
     }
