@@ -24,12 +24,12 @@ Vue.use(checkView)
 Vue.use(headroom)
 Vue.use(VueMq, {
     breakpoints: { // default breakpoints - customize this
-      sm: 450,
-      md: 1250,
-      lg: Infinity,
+        sm: 450,
+        md: 1250,
+        lg: Infinity,
     },
     defaultBreakpoint: 'sm' // customize this for SSR
-  })
+})
 
 // Initialize the app's store upon first visit to site before routing to a component
 router.beforeEach((to, from, next) => {

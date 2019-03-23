@@ -48,7 +48,7 @@
         padding: 20px;
         z-index: 0;
 
-        background: $bgColor;
+        background: $color-default;
 
         text-align: left;
 

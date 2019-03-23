@@ -2,15 +2,15 @@
 
 .basic-page {
   text-align: left;
-  width: calc(100% - #{$rightPageNavWidth});
+  width: calc(100% - #{$righter-desktop-width});
 
-  @media screen and (max-width: $breakMedium) {
+  @include bp-medium {
     width: 100%;
   }
 }
 
 .basic-page:last-of-type {
-  margin-bottom: $footerHeight;
+  margin-bottom: $footer-height-desktop;
 }
 
 .basic-page__title {
@@ -21,7 +21,7 @@
 
   font-size: 6em;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     height: 100%;
     line-height: 1.2em;
     font-size: 8em;
@@ -35,7 +35,7 @@
 .basic-page__section {
   padding-left: 80px;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     padding-left: 16px;
     padding-right: 16px;
   }
@@ -56,29 +56,29 @@
   margin-left: 100px;
   padding: 30px 0;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     margin-left: 1.5em;
   }
 }
 
 .basic-page__section /deep/ h3 {
-  font-family: $sansSerifFont;
+  font-family: $font-stack-avenir;
   font-weight: normal;
   font-size: 2.5em;
   margin-left: 100px;
   padding: 30px 0;
-  // @media screen and (max-width: $breakSmall) {
+  // @include bp-small {
   //   font-size: 1em;
   // }
 }
 
 .basic-page__section /deep/ > *:not(h2):not(h3):not(h4):not(h5):not(h6) {
   padding-left: 2%;
-  font-family: $serifFont;
+  font-family: $font-stack-amiri;
   font-size: 2.3em;
   line-height: 1.3em;
 
-  @media screen and (max-width: $breakSmall) {
+  @include bp-small {
     padding-left: 0%;
   }
 }

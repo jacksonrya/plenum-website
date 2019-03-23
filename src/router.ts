@@ -45,7 +45,7 @@ export default new Router({
         },
         {
             path: '/join-us',
-            name: 'join us',
+            name: 'join-us',
             component: PageView
         },
         {

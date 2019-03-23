@@ -279,7 +279,7 @@ export default {
         display: block;
 
         text-align: left;
-        font-size: $flyoutFontSize;
+        font-size: $flyout-font-size;
     }
 
     .fly-out-menu__section-title {
@@ -294,7 +294,7 @@ export default {
         }
 
         #about {
-            left: $navBarWidth;
+            left: $navigation-width;
         }
 
         #publications {
