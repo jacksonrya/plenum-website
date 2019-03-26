@@ -112,6 +112,7 @@ export default {
   }
   @include bp-small {
     width: 100%;
+    top: 0;
   }
 }
 
